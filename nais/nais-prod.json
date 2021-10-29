@@ -1,0 +1,6 @@
+{
+  "ingress": [
+    "https://arbeidsgiver.dev.intern.nav.no/permitteringsvarsel-notifikasjon"
+  ],
+  "kafka_pool": "nav-dev"
+}
