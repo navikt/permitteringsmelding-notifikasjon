@@ -1,0 +1,82 @@
+name: Build & deploy
+
+on: [push]
+
+env:
+  docker_image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '13.x'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Run tests
+        run: ./gradlew test --info
+      - name: Build jar with Gradle
+        run: ./gradlew shadowJar
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ env.docker_image }}
+
+  deploy-to-dev:
+    name: Deploy to dev
+    needs: test
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/med_stillingskategori'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
+          CLUSTER: dev-gcp
+          RESOURCE: nais/nais.yaml
+          VAR: image=${{ env.docker_image }}
+          VARS: deploy/dev.json
+          PRINT_PAYLOAD: true
+
+  deploy-to-prod:
+    name: Deploy to prod
+    needs: deploy-to-dev
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
+          CLUSTER: prod-gcp
+          RESOURCE: nais/nais.yaml
+          VAR: image=${{ env.docker_image }}
+          VARS: deploy/prod.json
+          PRINT_PAYLOAD: true
+
+#  deploy-alerts:
+#    name: Deploy alerts to prod
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v1
+#      - uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: prod-gcp
+#          RESOURCE: nais/alerts.yaml
