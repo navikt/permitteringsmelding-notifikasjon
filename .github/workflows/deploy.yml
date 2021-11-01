@@ -40,7 +40,7 @@ jobs:
   deploy-to-dev:
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/med_stillingskategori'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/lag-deployscript'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -50,7 +50,7 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: nais/nais.yaml
           VAR: image=${{ env.docker_image }}
-          VARS: nais/dev.json
+          VARS: nais/nais-dev.json
           PRINT_PAYLOAD: true
 
   deploy-to-prod:

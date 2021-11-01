@@ -1,0 +1,26 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+    name: permitteringsvarsel-notifikasjon
+    namespace: permittering-og-nedbemanning
+    labels:
+        team: permittering-og-nedbemanning
+spec:
+    image: {{ version }}
+    port: 8080
+    ingresses:
+    {{#each ingress as |url|}}
+        - {{url } }
+      {{/each}}
+    liveness:
+      path: /internal/isAlive
+    readiness:
+      path: /internal/isReady
+    gcp:
+        sqlInstances:
+              type: POSTGRES_12
+              databases:
+                  - name: permitteringsvarsel-notifikasjon
+
+    kafka:
+        pool: {{kafka_pool}}
