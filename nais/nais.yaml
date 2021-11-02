@@ -1,25 +1,24 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-    name: permitteringsvarsel-notifikasjon
-    namespace: permittering-og-nedbemanning
-    labels:
-        team: permittering-og-nedbemanning
+  name: permitteringsvarsel-notifikasjon
+  namespace: permittering-og-nedbemanning
+  labels:
+    team: permittering-og-nedbemanning
 spec:
-    image: {{ version }}
-    port: 8080
-    ingresses:
-    {{#each ingress as |url|}}
-        - {{ url }}
-    {{/each}}
-    liveness:
-      path: /internal/isAlive
-    readiness:
-      path: /internal/isReady
-    gcp:
-        sqlInstances:
-              type: POSTGRES_12
-              databases:
-                  - name: permitteringsvarsel-notifikasjon
-    kafka:
-        pool: {{kafka_pool}}
+  image: { { version } }
+  port: 8080
+  ingresses:
+    - https://arbeidsgiver.dev.intern.nav.no/permitteringsvarsel-notifikasjon
+  liveness:
+    path: /internal/isAlive
+  readiness:
+    path: /internal/isReady
+  gcp:
+    sqlInstances:
+      - name: permitteringsvarsel-notifikasjon
+        type: POSTGRES_12
+        databases:
+          - name: permitteringsvarsel-notifikasjon-db
+  kafka:
+    pool: nav-dev
