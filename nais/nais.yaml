@@ -21,6 +21,5 @@ spec:
               type: POSTGRES_12
               databases:
                   - name: permitteringsvarsel-notifikasjon
-
     kafka:
         pool: {{kafka_pool}}

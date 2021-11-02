@@ -53,21 +53,21 @@ jobs:
           VARS: nais/nais-dev.json
           PRINT_PAYLOAD: true
 
-  deploy-to-prod:
-    name: Deploy to prod
-    needs: deploy-to-dev
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
-          CLUSTER: prod-gcp
-          RESOURCE: nais/nais.yaml
-          VAR: image=${{ env.docker_image }}
-          VARS: nais/prod.json
-          PRINT_PAYLOAD: true
+#  deploy-to-prod:
+#    name: Deploy to prod
+#    needs: deploy-to-dev
+#    if: github.ref == 'refs/heads/main'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v1
+#      - uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
+#          CLUSTER: prod-gcp
+#          RESOURCE: nais/nais.yaml
+#          VAR: image=${{ env.docker_image }}
+#          VARS: nais/prod.json
+#          PRINT_PAYLOAD: true
 
 #  deploy-alerts:
 #    name: Deploy alerts to prod
