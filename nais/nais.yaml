@@ -6,7 +6,7 @@ metadata:
   labels:
     team: permittering-og-nedbemanning
 spec:
-  image: { { version } }
+  image: {{ version }}
   port: 8080
   ingresses:
     - https://arbeidsgiver.dev.intern.nav.no/permitteringsvarsel-notifikasjon
