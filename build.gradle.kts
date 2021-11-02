@@ -16,6 +16,10 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
+    implementation("com.graphql-java:graphql-java:16.2")
+    val fuelVersion = "2.3.1"
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+    implementation("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
