@@ -10,8 +10,8 @@ spec:
     port: 8080
     ingresses:
     {{#each ingress as |url|}}
-        - {{url } }
-      {{/each}}
+        - {{ url }}
+    {{/each}}
     liveness:
       path: /internal/isAlive
     readiness:
