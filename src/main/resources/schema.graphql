@@ -1,521 +1,360 @@
-# Denne dokumentasjonen er skrev i "du/dere"-form, hvor du/dere er produsenter, og "vi" er
-# notifikasjons-plattformen.
-
-
 directive @Validate on ARGUMENT_DEFINITION
+
 directive @MaxLength(max: Int) on INPUT_FIELD_DEFINITION
+
 directive @NonIdentifying on INPUT_FIELD_DEFINITION
+
 directive @ExactlyOneFieldGiven on INPUT_OBJECT
+
 directive @MaxValue(upToIncluding: Int) on ARGUMENT_DEFINITION
 
-"""
-DateTime med offset etter ISO8601-standaren. F.eks. '2011-12-03T10:15:30+01:00'.
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+) on FIELD_DEFINITION | OBJECT | INTERFACE
 
-Er representert som String.
-"""
+# DateTime med offset etter ISO8601-standaren. F.eks. '2011-12-03T10:15:30+01:00'.
+#
+# Er representert som String.
 scalar ISO8601DateTime
 
-# scalar NotifikasjonCursor
-
-"""
-Tilstanden til en oppgave.
-"""
+# Tilstanden til en oppgave.
 enum OppgaveTilstand {
-    """
-    En oppgave som kan utføres.
-    """
-    NY
+  # En oppgave som kan utføres.
+  NY
 
-    """
-    En oppgave som allerede er utført.
-    """
-    UTFOERT
+  # En oppgave som allerede er utført.
+  UTFOERT
 }
 
-"""
-Dette er roten som alle forespørsler starter fra.
-"""
+# Dette er roten som alle forespørsler starter fra.
 type Query {
-    """
-    Egnet for feilsøking. Forteller hvem du er autentisert som.
-    """
-    whoami: String
+  # Egnet for feilsøking. Forteller hvem du er autentisert som.
+  whoami: String
 
-    """
-    Vi bruker det Connections-patternet for paginering. Se
-    [Connection-standaren](https://relay.dev/graphql/connections.htm) for mer
-    informasjon.
+  # Vi bruker det Connections-patternet for paginering. Se
+  # [Connection-standaren](https://relay.dev/graphql/connections.htm) for mer
+  # informasjon.
+  #
+  # Dere må gjenta paremetere når dere blar gjennom alle notifikasjonen.
+  mineNotifikasjoner(
+    # antall notifikasjoner du ønsker å hente
+    first: Int
 
-    Dere må gjenta paremetere når dere blar gjennom alle notifikasjonen.
-
-    Hvis verken `merkelapp` eller `merkelapper` er gitt, vil notifikasjoner
-    med alle dine merkelapper være med.
-    """
-    mineNotifikasjoner(
-        "antall notifikasjoner du ønsker å hente"
-        first: Int @Validate @MaxValue(upToIncluding: 10000)
-
-        """Cursor til notifikasjonen du henter fra. Cursor får du fra [NotifikasjonEdge](#notifikasjonedge)."""
-        after: String
-
-        """Filtrer på merkelapp. Kan ikke brukes sammen med `merkelapper`."""
-        merkelapp: String
-
-        """Filtrer på merkelapper. Kan ikke brukes sammen med `merkelapp`."""
-        merkelapper: [String!]
-
-        grupperingsid: String
-    ): MineNotifikasjonerResultat!
+    # Cursor til notifikasjonen du henter fra. Cursor får du fra [NotifikasjonEdge](#notifikasjonedge).
+    after: String
+    merkelapp: String
+    grupperingsid: String
+  ): MineNotifikasjonerResultat!
 }
 
 union MineNotifikasjonerResultat =
-    | NotifikasjonConnection
-    | UgyldigMerkelapp
-    | UkjentProdusent
+    NotifikasjonConnection
+  | UgyldigMerkelapp
+  | UkjentProdusent
 
 type NotifikasjonConnection {
-    edges: [NotifikasjonEdge!]!
-    pageInfo: PageInfo!
+  edges: [NotifikasjonEdge!]!
+  pageInfo: PageInfo!
 }
 
 type NotifikasjonEdge {
-    node: Notifikasjon!
-    cursor: String!
+  node: Notifikasjon!
+  cursor: String!
 }
 
 type PageInfo {
-    hasNextPage: Boolean!
-    endCursor: String!
+  hasNextPage: Boolean!
+  endCursor: String!
 }
 
 union Notifikasjon = Beskjed | Oppgave
 
 type Oppgave {
-    mottaker: Mottaker!
-    metadata: Metadata!
-    oppgave: OppgaveData!
-    eksternVarsel: [EksternVarsel!]!
+  mottaker: Mottaker!
+  metadata: Metadata!
+  oppgave: OppgaveData!
 }
 
 type Beskjed {
-    mottaker: Mottaker!
-    metadata: Metadata!
-    beskjed: BeskjedData!
-    eksternVarsel: [EksternVarsel!]!
+  mottaker: Mottaker!
+  metadata: Metadata!
+  beskjed: BeskjedData!
 }
 
-union Mottaker =
-    | AltinnMottaker
-    | NaermesteLederMottaker
+union Mottaker = AltinnMottaker | NaermesteLederMottaker
 
 type AltinnMottaker {
-    serviceCode: String!
-    serviceEdition: String!
-    virksomhetsnummer: String!
+  serviceCode: String!
+  serviceEdition: String!
+  virksomhetsnummer: String!
 }
 
 type NaermesteLederMottaker {
-    naermesteLederFnr: String!
-    ansattFnr: String!
-    virksomhetsnummer: String!
+  naermesteLederFnr: String!
+  ansattFnr: String!
+  virksomhetsnummer: String!
 }
 
 type OppgaveData {
-    tilstand: OppgaveTilstand
+  tilstand: OppgaveTilstand
 
-    """
-    Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
-    """
-    merkelapp: String!
+  # Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
+  merkelapp: String!
 
-    """
-    Teksten som vises til brukeren.
-    """
-    tekst: String!
+  # Teksten som vises til brukeren.
+  tekst: String!
 
-    """
-    Lenken som brukeren føres til hvis de klikker på beskjeden.
-    """
-    lenke: String!
+  # Lenken som brukeren føres til hvis de klikker på beskjeden.
+  lenke: String!
 }
 
 type BeskjedData {
-    """
-    Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
-    """
-    merkelapp: String!
+  # Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
+  merkelapp: String!
 
-    """
-    Teksten som vises til brukeren.
-    """
-    tekst: String!
+  # Teksten som vises til brukeren.
+  tekst: String!
 
-    """
-    Lenken som brukeren føres til hvis de klikker på beskjeden.
-    """
-    lenke: String!
+  # Lenken som brukeren føres til hvis de klikker på beskjeden.
+  lenke: String!
 }
 
 type Metadata {
-    id: ID!
+  id: ID!
 
-    """
-    """
-    eksternId: String!
+  #
+  eksternId: String!
 
-    """
-    """
-    opprettetTidspunkt: ISO8601DateTime
+  #
+  opprettetTidspunkt: ISO8601DateTime
 
-    """
-    """
-    grupperingsid: String
-
-    softDeleted: Boolean!
-
-    softDeletedAt: ISO8601DateTime
+  #
+  grupperingsid: String
+  softDeleted: Boolean!
+  softDeletedAt: ISO8601DateTime
 }
 
-type EksternVarsel {
-    id: ID!
-    status: EksternVarselStatus!
-}
-
-enum EksternVarselStatus {
-    NY
-    UTFORT
-    FEIL
-}
-
-
-"""
-Dette er roten som alle endringer ("mutations") starter fra. Endringer inkluderer også
-å opprette nye ting.
-"""
+# Dette er roten som alle endringer ("mutations") starter fra. Endringer inkluderer også
+# å opprette nye ting.
 type Mutation {
-    """
-    Opprett en ny beskjed.
-    """
-    nyBeskjed(nyBeskjed: NyBeskjedInput! @Validate): NyBeskjedResultat!
+  # Opprett en ny beskjed.
+  nyBeskjed(nyBeskjed: NyBeskjedInput!): NyBeskjedResultat!
 
-    """
-    Opprett en ny oppgave.
-    """
-    nyOppgave(nyOppgave: NyOppgaveInput! @Validate): NyOppgaveResultat!
+  # Opprett en ny oppgave.
+  nyOppgave(nyOppgave: NyOppgaveInput!): NyOppgaveResultat!
 
-    """
-    Marker en oppgave (identifisert ved id) som utført.
-    """
-    oppgaveUtfoert(
-        """
-        ID-en som oppgaven har. Den du fikk da du opprettet oppgaven med `nyOppgave`.
-        """
-        id: ID!
-    ): OppgaveUtfoertResultat!
+  # Marker en oppgave (identifisert ved id) som utført.
+  oppgaveUtfoert(
+    # ID-en som oppgaven har. Den du fikk da du opprettet oppgaven med `nyOppgave`.
+    id: ID!
+  ): OppgaveUtfoertResultat!
 
-    """
-    Marker en oppgave (identifisert ved ekstern id) som utført.
-    """
-    oppgaveUtfoertByEksternId(
-        """
-        Merkelapp som oppgaven er registrert med.
-        """
-        merkelapp: String!,
+  # Marker en oppgave (identifisert ved ekstern id) som utført.
+  oppgaveUtfoertByEksternId(
+    # Merkelapp som oppgaven er registrert med.
+    merkelapp: String!
 
-        """
-        ID-en som *dere ga oss* da dere opprettet oppgaven med `nyOppgave`.
-        """
-        eksternId: ID!
-    ): OppgaveUtfoertResultat!
+    # ID-en som *dere ga oss* da dere opprettet oppgaven med `nyOppgave`.
+    eksternId: ID!
+  ): OppgaveUtfoertResultat!
 
+  # Markerer en notifikasjon som slettet (soft delete).
+  #
+  # Notifikasjonen vil forsvinne helt for mottakeren: de vil ikke kunne se den på
+  # noen som helst måte — som om notifikasjonen aldri eksisterte.
+  #
+  # For dere (produsenter), så kan dere fortsatt se notifikasjonen i listen over deres notifikasjoner.
+  #
+  # Advarsel: det er ikke mulig å angre på denne operasjonen.
+  softDeleteNotifikasjon(id: ID!): SoftDeleteNotifikasjonResultat!
 
-    """
-    Markerer en notifikasjon som slettet (soft delete).
+  # Se dokumentasjon for `softDeleteNotifikasjon(id)`.
+  softDeleteNotifikasjonByEksternId(
+    # Merkelappen som dere ga oss da dere opprettet notifikasjonen.
+    merkelapp: String!
 
-    Notifikasjonen vil forsvinne helt for mottakeren: de vil ikke kunne se den på
-    noen som helst måte — som om notifikasjonen aldri eksisterte.
+    # ID-en som dere ga oss da dere opprettet notifikasjonen.
+    eksternId: ID!
+  ): SoftDeleteNotifikasjonResultat!
 
-    For dere (produsenter), så kan dere fortsatt se notifikasjonen i listen over deres notifikasjoner.
+  # Sletter en notifikasjon og tilhørende data helt fra databasen og kafka.
+  # Formålet er å støtte juridiske krav om sletting i henhold til personvern.
+  #
+  # Advarsel: det er ikke mulig å angre på denne operasjonen. All data blir borte for godt.
+  hardDeleteNotifikasjon(id: ID!): HardDeleteNotifikasjonResultat!
 
-    Advarsel: det er ikke mulig å angre på denne operasjonen.
-    """
-    softDeleteNotifikasjon(id: ID!): SoftDeleteNotifikasjonResultat!
+  # Se dokumentasjon for `hardDeleteNotifikasjon(id)`.
+  hardDeleteNotifikasjonByEksternId(
+    # Merkelappen som dere ga oss da dere opprettet notifikasjonen.
+    merkelapp: String!
 
-    """
-    Se dokumentasjon for `softDeleteNotifikasjon(id)`.
-    """
-    softDeleteNotifikasjonByEksternId(
-        """
-        Merkelappen som dere ga oss da dere opprettet notifikasjonen.
-        """
-        merkelapp: String!,
-
-        """
-        ID-en som dere ga oss da dere opprettet notifikasjonen.
-        """
-        eksternId: ID!
-    ): SoftDeleteNotifikasjonResultat!
-
-    """
-    Sletter en notifikasjon og tilhørende data helt fra databasen og kafka.
-    Formålet er å støtte juridiske krav om sletting i henhold til personvern.
-
-    Advarsel: det er ikke mulig å angre på denne operasjonen. All data blir borte for godt.
-    """
-    hardDeleteNotifikasjon(id: ID!): HardDeleteNotifikasjonResultat!
-
-    """
-    Se dokumentasjon for `hardDeleteNotifikasjon(id)`.
-    """
-    hardDeleteNotifikasjonByEksternId(
-        """
-        Merkelappen som dere ga oss da dere opprettet notifikasjonen.
-        """
-        merkelapp: String!,
-
-        """
-        ID-en som dere ga oss da dere opprettet notifikasjonen.
-        """
-        eksternId: ID!
-    ): HardDeleteNotifikasjonResultat!
+    # ID-en som dere ga oss da dere opprettet notifikasjonen.
+    eksternId: ID!
+  ): HardDeleteNotifikasjonResultat!
 }
 
 union SoftDeleteNotifikasjonResultat =
-    | SoftDeleteNotifikasjonVellykket
-    | UgyldigMerkelapp
-    | NotifikasjonFinnesIkke
-    | UkjentProdusent
+    SoftDeleteNotifikasjonVellykket
+  | UgyldigMerkelapp
+  | NotifikasjonFinnesIkke
+  | UkjentProdusent
 
 type SoftDeleteNotifikasjonVellykket {
-    """
-    ID-en til oppgaven du "soft-delete"-et.
-    """
-    id: ID!
+  # ID-en til oppgaven du "soft-delete"-et.
+  id: ID!
 }
 
 union HardDeleteNotifikasjonResultat =
-    | HardDeleteNotifikasjonVellykket
-    | UgyldigMerkelapp
-    | NotifikasjonFinnesIkke
-    | UkjentProdusent
+    HardDeleteNotifikasjonVellykket
+  | UgyldigMerkelapp
+  | NotifikasjonFinnesIkke
+  | UkjentProdusent
 
 type HardDeleteNotifikasjonVellykket {
-    """
-    ID-en til oppgaven du "hard-delete"-et.
-    """
-    id: ID!
+  # ID-en til oppgaven du "hard-delete"-et.
+  id: ID!
 }
 
 union OppgaveUtfoertResultat =
-    | OppgaveUtfoertVellykket
-    | UgyldigMerkelapp
-    | NotifikasjonFinnesIkke
-    | UkjentProdusent
+    OppgaveUtfoertVellykket
+  | UgyldigMerkelapp
+  | NotifikasjonFinnesIkke
+  | UkjentProdusent
 
 type OppgaveUtfoertVellykket {
-    """
-    ID-en til oppgaven du oppdaterte.
-    """
-    id: ID!
+  # ID-en til oppgaven du oppdaterte.
+  id: ID!
 }
 
 input NyBeskjedInput {
-    mottaker: MottakerInput!
-    notifikasjon: NotifikasjonInput!
-    metadata: MetadataInput!
-    eksternVarsel: [EksternVarselInput!]! = []
+  mottaker: MottakerInput!
+  notifikasjon: NotifikasjonInput!
+  metadata: MetadataInput!
 }
 
 input NyOppgaveInput {
-    mottaker: MottakerInput!
-    notifikasjon: NotifikasjonInput!
-    metadata: MetadataInput!
-    eksternVarsel: [EksternVarselInput!]! = []
+  mottaker: MottakerInput!
+  notifikasjon: NotifikasjonInput!
+  metadata: MetadataInput!
 }
 
-input EksternVarselInput @ExactlyOneFieldGiven {
-    sms: EksternVarselSmsInput
-    epost: EksternVarselEpostInput
+# Hvem som skal se notifikasjonen.
+#
+# Du kan spesifisere mottaker av notifikasjoner på forskjellige måter. Du skal bruke nøyaktig ett av feltene.
+#
+# Vi har implementert det på denne måten fordi GraphQL ikke støtter union-typer som input.
+input MottakerInput {
+  altinn: AltinnMottakerInput
+  naermesteLeder: NaermesteLederMottakerInput
 }
 
-input EksternVarselSmsInput {
-    mottaker: SmsMottakerInput!
-    smsTekst: String!
-}
-
-input EksternVarselEpostInput {
-    mottaker: EpostMottakerInput!
-    epostTittel: String!
-    epostHtmlBody: String!
-}
-
-input SmsMottakerInput @ExactlyOneFieldGiven {
-    kontaktinfo: SmsKontaktInfoInput
-    # altinntjeneste: Altinntjeneste
-}
-
-input SmsKontaktInfoInput {
-    fnr: String!
-    tlf: String! # Validate regex ?
-}
-
-input EpostMottakerInput @ExactlyOneFieldGiven {
-    kontaktinfo: EpostKontaktInfoInput
-    # altinntjeneste: Altinntjeneste
-}
-
-input EpostKontaktInfoInput {
-    fnr: String!
-    epostadresse: String!
-}
-
-# input Altinntjeneste {
-#     virksomhetsnummer: String!
-#     serviceCode: String!
-#     serviceCodeEdition: String!
-# }
-
-"""
-Hvem som skal se notifikasjonen.
-
-Du kan spesifisere mottaker av notifikasjoner på forskjellige måter. Du skal bruke nøyaktig ett av feltene.
-
-Vi har implementert det på denne måten fordi GraphQL ikke støtter union-typer som input.
-"""
-input MottakerInput @ExactlyOneFieldGiven {
-    altinn: AltinnMottakerInput
-    naermesteLeder: NaermesteLederMottakerInput
-}
-
-"""
-Spesifiser mottaker ved hjelp av tilganger i Altinn. Enhver som har den gitte tilgangen vil
-kunne se notifikasjone.
-
-Tilgangssjekken utføres hver gang en bruker ser på notifikasjoner. Det betyr at hvis en
-bruker mister en Altinn-tilgang, så vil de hverken se historiske eller nye notifikasjone knyttet til den Altinn-tilgangen.
-Og motsatt, hvis en bruker får en Altinn-tilgang, vil de se tidligere notifikasjoner for den Altinn-tilgangen.
-"""
+# Spesifiser mottaker ved hjelp av tilganger i Altinn. Enhver som har den gitte tilgangen vil
+# kunne se notifikasjone.
+#
+# Tilgangssjekken utføres hver gang en bruker ser på notifikasjoner. Det betyr at hvis en
+# bruker mister en Altinn-tilgang, så vil de hverken se historiske eller nye notifikasjone knyttet til den Altinn-tilgangen.
+# Og motsatt, hvis en bruker får en Altinn-tilgang, vil de se tidligere notifikasjoner for den Altinn-tilgangen.
 input AltinnMottakerInput {
-    serviceCode: String!
-    serviceEdition: String!
-    virksomhetsnummer: String!
+  serviceCode: String!
+  serviceEdition: String!
+  virksomhetsnummer: String!
 }
 
-"""
-Spesifiser mottaker ved hjelp av fødselsnummer. Fødselsnummeret er det til nærmeste leder. Det er kun denne personen
-som potensielt kan se notifikasjonen. Det er videre en sjekk for å se om denne personen fortsatt er nærmeste leder
-for den ansatte notifikasjonen gjelder.
-
-Tilgangssjekken utføres hver gang en bruker ønsker se notifikasjonen.
-"""
+# Spesifiser mottaker ved hjelp av fødselsnummer. Fødselsnummeret er det til nærmeste leder. Det er kun denne personen
+# som potensielt kan se notifikasjonen. Det er videre en sjekk for å se om denne personen fortsatt er nærmeste leder
+# for den ansatte notifikasjonen gjelder.
+#
+# Tilgangssjekken utføres hver gang en bruker ønsker se notifikasjonen.
 input NaermesteLederMottakerInput {
-    naermesteLederFnr: String!
-    ansattFnr: String!
-    virksomhetsnummer: String!
+  naermesteLederFnr: String!
+  ansattFnr: String!
+  virksomhetsnummer: String!
 }
 
-"""
-"""
+#
 input NotifikasjonInput {
-    """
-    Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
+  # Merkelapp for beskjeden. Er typisk navnet på ytelse eller lignende. Den vises til brukeren.
+  #
+  # Hva du kan oppgi som merkelapp er bestemt av produsent-registeret.
+  merkelapp: String!
 
-    Hva du kan oppgi som merkelapp er bestemt av produsent-registeret.
-    """
-    merkelapp: String!
+  # Teksten som vises til brukeren.
+  tekst: String!
 
-    """
-    Teksten som vises til brukeren.
-    """
-    tekst: String! @MaxLength(max: 300) @NonIdentifying
-
-    """
-    Lenken som brukeren føres til hvis de klikker på beskjeden.
-    """
-    lenke: String!
+  # Lenken som brukeren føres til hvis de klikker på beskjeden.
+  lenke: String!
 }
 
 input MetadataInput {
-    """
-    """
-    eksternId: String!
+  #
+  eksternId: String!
 
-    """
-    """
-    opprettetTidspunkt: ISO8601DateTime
+  #
+  opprettetTidspunkt: ISO8601DateTime
 
-    """
-    """
-    grupperingsid: String
+  #
+  grupperingsid: String
 }
 
 union NyOppgaveResultat =
-    | NyOppgaveVellykket
-    | UgyldigMerkelapp
-    | UgyldigMottaker
-    | DuplikatEksternIdOgMerkelapp
-    | UkjentProdusent
+    NyOppgaveVellykket
+  | UgyldigMerkelapp
+  | UgyldigMottaker
+  | DuplikatEksternIdOgMerkelapp
+  | UkjentProdusent
 
 union NyBeskjedResultat =
-    | NyBeskjedVellykket
-    | UgyldigMerkelapp
-    | UgyldigMottaker
-    | DuplikatEksternIdOgMerkelapp
-    | UkjentProdusent
+    NyBeskjedVellykket
+  | UgyldigMerkelapp
+  | UgyldigMottaker
+  | DuplikatEksternIdOgMerkelapp
+  | UkjentProdusent
 
 type NyBeskjedVellykket {
-    id: ID!
-    eksternVarsel: [NyEksternVarselResultat!]!
-}
-
-type NyEksternVarselResultat {
-    id: ID!
+  id: ID!
 }
 
 type NyOppgaveVellykket {
-    id: ID!
-    eksternVarsel: [NyEksternVarselResultat!]!
+  id: ID!
 }
 
-"""
-Denne feilen returneres dersom en produsent forsøker å benytte en merkelapp som den ikke har tilgang til.
-"""
+# Denne feilen returneres dersom en produsent forsøker å benytte en merkelapp som den ikke har tilgang til.
 type UgyldigMerkelapp implements Error {
-    feilmelding: String!
+  feilmelding: String!
 }
 
-"""
-Denne feilen returneres dersom en produsent forsøker å benytte en mottaker som den ikke har tilgang til.
-"""
+# Denne feilen returneres dersom en produsent forsøker å benytte en mottaker som den ikke har tilgang til.
 type UgyldigMottaker implements Error {
-    feilmelding: String!
+  feilmelding: String!
 }
 
-"""
-Denne feilen returneres dersom vi ikke greier å finne dere i produsent-registeret vårt.
-"""
+# Denne feilen returneres dersom vi ikke greier å finne dere i produsent-registeret vårt.
 type UkjentProdusent implements Error {
-    feilmelding: String!
+  feilmelding: String!
 }
 
-"""
-Denne feilen returneres dersom du prøver å referere til en notifikasjon
-som ikke eksisterer.
-
-Utover at dere kan ha oppgitt feil informasjon, så kan det potensielt være på grunn
-av "eventual consistency" i systemet vårt.
-"""
+# Denne feilen returneres dersom du prøver å referere til en notifikasjon
+# som ikke eksisterer.
+#
+# Utover at dere kan ha oppgitt feil informasjon, så kan det potensielt være på grunn
+# av "eventual consistency" i systemet vårt.
 type NotifikasjonFinnesIkke implements Error {
-    feilmelding: String!
+  feilmelding: String!
 }
 
-"""
-Denne feilen returneres dersom du prøver å opprette en notifikasjon med en eksternId og merkelapp som allerede finnes
-"""
+# Denne feilen returneres dersom du prøver å opprette en notifikasjon med en eksternId og merkelapp som allerede finnes
 type DuplikatEksternIdOgMerkelapp implements Error {
-    feilmelding: String!
+  feilmelding: String!
 }
 
 interface Error {
-    feilmelding: String!
+  feilmelding: String!
 }
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+scalar Upload

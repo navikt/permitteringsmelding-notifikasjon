@@ -1,0 +1,40 @@
+mutation OpprettNyBeskjed(
+    $eksternId: String!
+    $virksomhetsnummer: String!
+    $lenke: String!
+) {
+    nyBeskjed(nyBeskjed: {
+        metadata: {
+            eksternId: $eksternId
+        }
+        mottaker: {
+            altinn: {
+                serviceCode: "1234"
+                serviceEdition: "1"
+                virksomhetsnummer: $virksomhetsnummer
+            }
+        }
+        notifikasjon: {
+            merkelapp: "EtSakssystem"
+            tekst: "Du har fått svar på din søknad"
+            lenke: $lenke
+        }
+    }) {
+        __typename
+        ... on NyBeskjedVellykket {
+            id
+        }
+        ... on UgyldigMerkelapp {
+            feilmelding
+        }
+        ... on UgyldigMottaker {
+            feilmelding
+        }
+        ... on DuplikatEksternIdOgMerkelapp {
+            feilmelding
+        }
+        ... on UkjentProdusent {
+            feilmelding
+        }
+    }
+}
