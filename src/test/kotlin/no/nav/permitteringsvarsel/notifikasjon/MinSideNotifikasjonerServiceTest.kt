@@ -11,8 +11,6 @@ import org.junit.Test
 
 class MinSideNotifikasjonerServiceTest {
 
-
-
     @Test
     fun `Test for å verifisere oppsett av klienter`() {
 
