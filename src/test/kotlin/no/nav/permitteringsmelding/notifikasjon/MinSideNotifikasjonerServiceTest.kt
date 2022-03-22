@@ -1,12 +1,12 @@
-package no.nav.permitteringsvarsel.notifikasjon
+package no.nav.permitteringsmelding.notifikasjon
 
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.MinSideNotifikasjonerService
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 import org.junit.Test
 
 class MinSideNotifikasjonerServiceTest {

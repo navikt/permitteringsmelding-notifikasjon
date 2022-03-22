@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon.minsideklient
+package no.nav.permitteringsmelding.notifikasjon.minsideklient
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*

@@ -1,6 +1,6 @@
-# permitteringsvarsel-notifikasjon
+# permitteringsmelding-notifikasjon
 
-Sender notifikasjoner via Min Side Arbeidsgiver om at frist for å sende permitteringsvarsel til ansatte snart løper ut.
+Sender notifikasjoner via Min Side Arbeidsgiver om permitteringsmeldinger.
 
 ## Kjøre lokalt
 

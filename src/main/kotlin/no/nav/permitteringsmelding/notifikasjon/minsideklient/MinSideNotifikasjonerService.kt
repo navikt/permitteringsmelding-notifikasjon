@@ -1,6 +1,6 @@
-package no.nav.permitteringsvarsel.notifikasjon.minsideklient
+package no.nav.permitteringsmelding.notifikasjon.minsideklient
 
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 
 class MinSideNotifikasjonerService(private val minSideGraphQLClient : MinSideGraphQLKlient) {
 

@@ -1,13 +1,13 @@
-package no.nav.permitteringsvarsel.notifikasjon
+package no.nav.permitteringsmelding.notifikasjon
 
-import no.nav.permitteringsvarsel.notifikasjon.utils.log
+import no.nav.permitteringsmelding.notifikasjon.utils.log
 import io.javalin.Javalin
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.logging.*
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.MinSideNotifikasjonerService
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.getHttpClient
-import no.nav.permitteringsvarsel.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.getHttpClient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 import utils.Liveness
 import java.io.Closeable
 import java.util.concurrent.TimeUnit

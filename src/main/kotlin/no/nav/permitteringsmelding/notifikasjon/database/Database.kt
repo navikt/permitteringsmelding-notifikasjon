@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon.database
+package no.nav.permitteringsmelding.notifikasjon.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource

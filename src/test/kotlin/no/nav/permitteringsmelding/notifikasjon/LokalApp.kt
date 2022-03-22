@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon
+package no.nav.permitteringsmelding.notifikasjon
 
 // Brukes for å kjøre appen lokalt
 fun main() {

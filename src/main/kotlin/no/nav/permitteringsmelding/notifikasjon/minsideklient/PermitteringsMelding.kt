@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon.minsideklient
+package no.nav.permitteringsmelding.notifikasjon.minsideklient
 
 import java.time.LocalDate
 import java.util.*

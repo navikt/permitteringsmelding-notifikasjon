@@ -38,11 +38,11 @@ dependencies {
 }
 
 val graphqlGenerateClient by tasks.getting(com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask::class) {
-    packageName.set("no.nav.permitteringsvarsel.notifikasjon.graphql.generated\"")
+    packageName.set("no.nav.permitteringsmelding.notifikasjon.graphql.generated\"")
     schemaFile.set(file("src/main/resources/schema.graphql"))
     serializer.set(GraphQLSerializer.KOTLINX)
 }
 
 application {
-    mainClass.set("no.nav.permitteringsvarsel.notifikasjon.AppKt")
+    mainClass.set("no.nav.permitteringsmelding.notifikasjon.AppKt")
 }

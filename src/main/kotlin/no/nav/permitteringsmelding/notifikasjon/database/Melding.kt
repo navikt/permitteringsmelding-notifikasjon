@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon.database
+package no.nav.permitteringsmelding.notifikasjon.database
 
 import java.time.LocalDate
 import java.util.*

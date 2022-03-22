@@ -1,4 +1,4 @@
-package no.nav.permitteringsvarsel.notifikasjon.autentisering
+package no.nav.permitteringsmelding.notifikasjon.autentisering
 
 
 import io.ktor.client.*

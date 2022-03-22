@@ -40,7 +40,7 @@ jobs:
   deploy-to-dev:
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/lag-deployscript'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1

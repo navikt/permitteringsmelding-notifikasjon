@@ -1,6 +1,6 @@
-package no.nav.permitteringsvarsel.notifikasjon
+package no.nav.permitteringsmelding.notifikasjon
 
-import no.nav.permitteringsvarsel.notifikasjon.database.Database
+import no.nav.permitteringsmelding.notifikasjon.database.Database
 import org.junit.Test
 
 

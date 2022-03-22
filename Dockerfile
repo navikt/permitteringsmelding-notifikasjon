@@ -1,4 +1,4 @@
 FROM navikt/java:17
-COPY ./build/libs/permitteringsvarsel-notifikasjon-all.jar app.jar
+COPY ./build/libs/permitteringsmelding-notifikasjon-all.jar app.jar
 
 EXPOSE 8080
