@@ -10,7 +10,7 @@ import io.ktor.server.netty.*
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
-import no.nav.permitteringsmelding.notifikasjon.minsideklient.getHttpClient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
 import java.io.Closeable
@@ -43,7 +43,7 @@ fun main() {
         .clientAuthMethod(ClientAuthenticationMethod.PRIVATE_KEY_JWT)
         .build()
 
-    val httpClient = getHttpClient()
+    val httpClient = getDefaultHttpClient()
     val oauth2Client = Oauth2Client(httpClient, azureAuthProperties)
 
     val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)

@@ -4,7 +4,7 @@ import com.nimbusds.jwt.SignedJWT
 import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod
 import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
-import no.nav.permitteringsmelding.notifikasjon.minsideklient.getHttpClient
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.setup.issuerConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
@@ -51,7 +51,7 @@ class AuthenticationTest {
     fun skal_hente_machine_to_machine_token_med_azure() {
         startLokalApp(issuerConfig = issuerConfig(mockOAuth2Server)).use {
 
-            val defaultHttpClient = getHttpClient()
+            val defaultHttpClient = getDefaultHttpClient()
             val oauth2Client = Oauth2Client(
                 defaultHttpClient,
                 azureAuthProperties
