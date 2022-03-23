@@ -4,7 +4,7 @@ import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGra
 
 class MinSideNotifikasjonerService(private val minSideGraphQLClient : MinSideGraphQLKlient) {
 
-    fun sendBeskjed(virksomhetsnummer: String,
+    suspend fun sendBeskjed(virksomhetsnummer: String,
                     lenke: String,
                     eksternId: String) {
         minSideGraphQLClient.opprettNyBeskjed(virksomhetsnummer, lenke, eksternId)

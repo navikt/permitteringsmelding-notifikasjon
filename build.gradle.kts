@@ -1,7 +1,7 @@
 import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.0"
     id("com.expediagroup.graphql") version "5.2.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.5.31"
@@ -16,7 +16,6 @@ repositories {
 
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    implementation("io.javalin:javalin:4.1.1")
 
     // Use the Kotlin JDK 8 standard library.
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -24,6 +23,8 @@ dependencies {
     val ktor_version = "1.6.4"
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
     implementation("io.ktor:ktor-client-logging-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
     implementation("com.graphql-java:graphql-java:16.2")
@@ -31,7 +32,10 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("com.github.seratch:kotliquery:1.6.1")
     implementation("com.h2database:h2:1.4.200")
+    implementation("no.nav.security:token-validation-ktor:1.3.9")
+    implementation("no.nav.security:token-client-core:1.3.9")
 
+    testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")

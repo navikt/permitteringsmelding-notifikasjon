@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
 import kotliquery.*
-import java.util.*
 
 class Database {
     private val dataSource: HikariDataSource = hikari()
@@ -39,22 +38,22 @@ class Database {
         }
     }
 
-    fun hentMeldingerForNotifikasjon() {
-        val tilMelding: (Row)-> Melding = { row ->
-            Melding(
-                UUID.fromString(row.stringOrNull("id")),
-                row.string("opprettet_av"),
-                row.string("bedrifts_nr"),
-                row.localDate("varslet_nav_dato"),
-                row.localDate("start_dato"),
-                row.localDateOrNull("slutt_dato")
-            )
-        }
-        using(sessionOf(dataSource)) { session ->
-            session.run(queryOf("""
-                select * from melding where (now() + interval '2 week') > start_dato;
-            """.trimIndent()).map(tilMelding))
-        }
-    }
+//    fun hentMeldingerForNotifikasjon() {
+//        val tilMelding: (Row)-> Melding = { row ->
+//            Melding(
+//                UUID.fromString(row.stringOrNull("id")),
+//                row.string("opprettet_av"),
+//                row.string("bedrifts_nr"),
+//                row.localDate("varslet_nav_dato"),
+//                row.localDate("start_dato"),
+//                row.localDateOrNull("slutt_dato")
+//            )
+//        }
+//        using(sessionOf(dataSource)) { session ->
+//            session.run(queryOf("""
+//                select * from melding where (now() + interval '2 week') > start_dato;
+//            """.trimIndent()).map(tilMelding))
+//        }
+//    }
 
 }
