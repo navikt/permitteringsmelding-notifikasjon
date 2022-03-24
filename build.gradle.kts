@@ -35,8 +35,8 @@ dependencies {
     implementation("com.zaxxer:HikariCP:5.0.0")
     implementation("com.github.seratch:kotliquery:1.6.1")
     implementation("com.h2database:h2:1.4.200")
-    implementation("no.nav.security:token-validation-ktor:1.3.9")
-    implementation("no.nav.security:token-client-core:1.3.9")
+    implementation("no.nav.security:token-validation-ktor:1.3.10")
+    implementation("no.nav.security:token-client-core:1.3.10")
 
     testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
