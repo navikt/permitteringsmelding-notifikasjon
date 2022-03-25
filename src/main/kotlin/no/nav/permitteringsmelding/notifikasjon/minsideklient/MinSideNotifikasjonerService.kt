@@ -7,6 +7,6 @@ class MinSideNotifikasjonerService(private val minSideGraphQLClient : MinSideGra
     suspend fun sendBeskjed(virksomhetsnummer: String,
                     lenke: String,
                     eksternId: String) {
-        minSideGraphQLClient.opprettNyBeskjed(virksomhetsnummer, lenke, eksternId)
+        minSideGraphQLClient.opprettNySak(virksomhetsnummer, lenke, eksternId)
     }
 }
