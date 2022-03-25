@@ -9,9 +9,11 @@ plugins {
 }
 
 repositories {
-    gradlePluginPortal()
-    maven("https://kotlin.bintray.com/kotlinx")
     mavenCentral()
+    maven {
+        url = uri("https://packages.confluent.io/maven/")
+    }
+    gradlePluginPortal()
 }
 
 dependencies {
