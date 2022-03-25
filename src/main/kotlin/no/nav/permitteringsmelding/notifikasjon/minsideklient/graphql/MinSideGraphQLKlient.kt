@@ -5,7 +5,6 @@ import io.ktor.client.*
 import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
-import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNyBeskjed
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
 import no.nav.permitteringsmelding.notifikasjon.utils.environmentVariables
 import java.net.URL
