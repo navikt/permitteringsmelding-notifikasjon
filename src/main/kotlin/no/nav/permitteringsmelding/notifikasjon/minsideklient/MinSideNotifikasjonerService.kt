@@ -1,12 +1,23 @@
 package no.nav.permitteringsmelding.notifikasjon.minsideklient
 
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 
 class MinSideNotifikasjonerService(private val minSideGraphQLClient : MinSideGraphQLKlient) {
 
-    suspend fun sendBeskjed(virksomhetsnummer: String,
-                    lenke: String,
-                    eksternId: String) {
-        minSideGraphQLClient.opprettNySak(virksomhetsnummer, lenke, eksternId)
+    suspend fun opprettNySak(grupperingsid: String,
+                             merkelapp: String,
+                             virksomhetsnummer: String,
+                             tittel: String,
+                             lenke: String,
+                             tidspunkt: ISO8601DateTime? = null) {
+        minSideGraphQLClient.opprettNySak(
+            grupperingsid,
+            merkelapp,
+            virksomhetsnummer,
+            tittel,
+            lenke,
+            tidspunkt
+        )
     }
 }
