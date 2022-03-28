@@ -27,3 +27,6 @@ spec:
       rules:
         - application: notifikasjon-produsent-api
           namespace: fager
+  azure:
+    application:
+      enabled: true
