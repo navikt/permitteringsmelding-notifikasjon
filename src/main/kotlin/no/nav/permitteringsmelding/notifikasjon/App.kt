@@ -7,13 +7,18 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import no.nav.permitteringsmelding.kafka.PermitteringsmeldingConsumer
+import no.nav.permitteringsmelding.kafka.consumerConfig
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.io.Closeable
+import kotlin.concurrent.thread
 
 class App: Closeable {
     private val server = embeddedServer(Netty, port = 8080) {
@@ -23,10 +28,15 @@ class App: Closeable {
             get("/permitteringsmelding-notifikasjon/internal/isReady") { call.respond(HttpStatusCode.OK) }
         }
     }
+    val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
+    val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer)
 
     fun start() {
         // runFlywayMigrations(dataSource)
         server.start()
+        thread {
+            permitteringsmeldingConsumer.start();
+        }
     }
 
     override fun close() {
@@ -45,6 +55,7 @@ fun main() {
 
     val httpClient = getDefaultHttpClient()
     val oauth2Client = Oauth2Client(httpClient, azureAuthProperties)
+
 
     val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)
     val minSideNotifikasjonerService = MinSideNotifikasjonerService(minSideGraphQLKlient)
