@@ -20,7 +20,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.io.Closeable
 import kotlin.concurrent.thread
 
-class App: Closeable {
+class App(private val permitteringsmeldingConsumer: PermitteringsmeldingConsumer) : Closeable {
     private val server = embeddedServer(Netty, port = 8080) {
 
         routing {
@@ -28,8 +28,7 @@ class App: Closeable {
             get("/permitteringsmelding-notifikasjon/internal/isReady") { call.respond(HttpStatusCode.OK) }
         }
     }
-    val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
-    val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer)
+
 
     fun start() {
         // runFlywayMigrations(dataSource)
@@ -57,9 +56,11 @@ fun main() {
     val httpClient = getDefaultHttpClient()
     val oauth2Client = Oauth2ClientImpl(httpClient, azureAuthProperties)
 
+    val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
+    val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer)
 
     val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)
     val minSideNotifikasjonerService = MinSideNotifikasjonerService(minSideGraphQLKlient)
 
-    App().start()
+    App(permitteringsmeldingConsumer).start()
 }

@@ -50,6 +50,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
     testImplementation("io.ktor:ktor-client-mock:$ktor_version")
+    testImplementation("io.mockk:mockk:1.12.2")
 }
 
 val graphqlGenerateClient by tasks.getting(com.expediagroup.graphql.plugin.gradle.tasks.GraphQLGenerateClientTask::class) {

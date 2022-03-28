@@ -1,6 +1,7 @@
 package no.nav.permitteringsmelding.notifikasjon
 
 import com.nimbusds.jwt.SignedJWT
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2ClientImpl
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
@@ -24,7 +25,7 @@ class AuthenticationTest {
 
     @Test
     fun skal_hente_machine_to_machine_token_med_azure() {
-        startLokalApp(issuerConfig = issuerConfig(mockOAuth2Server)).use {
+        startLokalApp(mockk(relaxed = true)).use {
 
             val defaultHttpClient = getDefaultHttpClient()
             val oauth2Client = Oauth2ClientImpl(

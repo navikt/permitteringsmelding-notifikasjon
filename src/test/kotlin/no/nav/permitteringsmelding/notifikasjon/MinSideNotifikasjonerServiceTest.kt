@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import io.ktor.utils.io.*
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
@@ -31,7 +32,7 @@ class MinSideNotifikasjonerServiceTest {
     fun `Test for å verifisere oppsett av klienter`() {
         val oauth2Client = Oauth2ClientStub()
 
-        startLokalApp(issuerConfig = issuerConfig(mockOAuth2Server)).use {
+        startLokalApp(mockk(relaxed = true)).use {
             runBlocking {
                 val mockEngine = MockEngine { request ->
                     respond(
