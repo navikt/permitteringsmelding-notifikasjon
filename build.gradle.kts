@@ -43,6 +43,9 @@ dependencies {
     implementation("org.apache.kafka:kafka-clients:2.7.0")
     implementation("io.confluent:kafka-avro-serializer:6.0.1")
 
+    implementation("com.fasterxml.jackson.module")
+    implementation("jackson-module-kotlin")
+
     testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
