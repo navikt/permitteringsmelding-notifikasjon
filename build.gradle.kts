@@ -38,6 +38,9 @@ dependencies {
     implementation("no.nav.security:token-validation-ktor:1.3.9")
     implementation("no.nav.security:token-client-core:1.3.9")
 
+    implementation("org.apache.kafka:kafka-clients:2.7.0")
+    implementation("io.confluent:kafka-avro-serializer:6.0.1")
+
     testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")

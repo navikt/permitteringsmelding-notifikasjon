@@ -6,6 +6,10 @@ data class EnvironmentVariables(
     val azureJWK: String,
     val urlTilNotifikasjonIMiljo: String,
     val notifikasjonerScope: String,
+    val kafkaBrokers: String,
+    val kafkaTruststorePath: String,
+    val kafkaCredstorePassword: String,
+    val kafkaKeystorePath: String
 )
 
 val notifikasjonerScope = when(Cluster.current) {
@@ -23,5 +27,9 @@ val environmentVariables = EnvironmentVariables(
     System.getenv("AZURE_APP_CLIENT_ID"),
     System.getenv("AZURE_APP_JWK"),
     urlTilNotifikasjonIMiljo,
-    notifikasjonerScope
+    notifikasjonerScope,
+    System.getenv("KAFKA_BROKERS"),
+    System.getenv("KAFKA_TRUSTSTORE_PATH"),
+    System.getenv("KAFKA_CREDSTORE_PASSWORD"),
+    System.getenv("KAFKA_KEYSTORE_PATH")
 )
