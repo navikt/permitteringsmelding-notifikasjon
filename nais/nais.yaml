@@ -22,3 +22,8 @@ spec:
           - name: permitteringsmelding-notifikasjon-db
   kafka:
     pool: nav-dev
+  accessPolicy:
+    outbound:
+      rules:
+        - application: notifikasjon-produsent-api
+          namespace: fager

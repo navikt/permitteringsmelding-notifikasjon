@@ -2,6 +2,8 @@ package no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql
 
 import com.expediagroup.graphql.client.ktor.GraphQLKtorClient
 import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
@@ -34,7 +36,9 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
                 lenke,
                 tidspunkt
             ));
-            val resultat = client.execute(query);
+            val resultat = client.execute(query) {
+                header(HttpHeaders.Authorization, "Bearer $scopedAccessToken")
+            };
 
         }
         return
