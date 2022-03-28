@@ -8,12 +8,10 @@ metadata:
 spec:
   image: {{ version }}
   port: 8080
-  ingresses:
-    - https://arbeidsgiver.dev.intern.nav.no/permitteringsmelding-notifikasjon
   liveness:
-    path: /internal/isAlive
+    path: /permitteringsmelding-notifikasjon/internal/isAlive
   readiness:
-    path: /internal/isReady
+    path: /permitteringsmelding-notifikasjon/internal/isReady
   gcp:
     sqlInstances:
       - name: permitteringsmelding-notifikasjon
