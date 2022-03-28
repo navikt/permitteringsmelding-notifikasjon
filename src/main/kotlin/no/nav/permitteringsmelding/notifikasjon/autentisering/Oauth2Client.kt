@@ -3,6 +3,7 @@ package no.nav.permitteringsmelding.notifikasjon.autentisering
 import io.ktor.client.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import no.nav.permitteringsmelding.notifikasjon.utils.environmentVariables
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
 import no.nav.security.token.support.client.core.OAuth2GrantType
 import no.nav.security.token.support.client.core.OAuth2ParameterNames
@@ -10,18 +11,27 @@ import no.nav.security.token.support.client.core.auth.ClientAssertion
 import no.nav.security.token.support.client.core.oauth2.OAuth2AccessTokenResponse
 import java.net.URI
 
-class Oauth2Client(
-    private val httpClient: HttpClient,
-    private val azureAuthProperties: ClientAuthenticationProperties,
-) {
+interface Oauth2Client{
+    suspend fun machine2machine(): OAuth2AccessTokenResponse
+}
 
-    suspend fun machine2machine(tokenEndpointUrl: String, scope: String): OAuth2AccessTokenResponse {
+class Oauth2ClientImpl(
+    private val httpClient: HttpClient,
+    private val azureAuthProperties: ClientAuthenticationProperties) : Oauth2Client {
+
+    suspend fun machine2machine(tokenEndpointUrl: String, scope: String) :OAuth2AccessTokenResponse {
         val grant = GrantRequest.machine2machine(scope)
         return httpClient.tokenRequest(
             tokenEndpointUrl,
             clientAuthProperties = azureAuthProperties,
             grantRequest = grant
         )
+    }
+
+    override suspend fun machine2machine(): OAuth2AccessTokenResponse {
+        val tokenEndpointUrl = environmentVariables.azureADTokenEndpointUrl
+        val scope = environmentVariables.notifikasjonerScope
+        return machine2machine(tokenEndpointUrl, scope)
     }
 }
 

@@ -10,7 +10,7 @@ import io.ktor.server.netty.*
 import no.nav.permitteringsmelding.kafka.PermitteringsmeldingConsumer
 import no.nav.permitteringsmelding.kafka.consumerConfig
 import no.nav.permitteringsmelding.notifikasjon.utils.log
-import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
+import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2ClientImpl
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
@@ -41,6 +41,7 @@ class App: Closeable {
 
     override fun close() {
         log.info("Stopper app")
+        server.stop(0, 0)
     }
 }
 
@@ -54,7 +55,7 @@ fun main() {
         .build()
 
     val httpClient = getDefaultHttpClient()
-    val oauth2Client = Oauth2Client(httpClient, azureAuthProperties)
+    val oauth2Client = Oauth2ClientImpl(httpClient, azureAuthProperties)
 
 
     val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)

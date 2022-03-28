@@ -12,18 +12,28 @@ data class EnvironmentVariables(
     val kafkaKeystorePath: String
 )
 
+val azureADTokenEndpointUrl = when(Cluster.current) {
+    Cluster.DEV_GCP -> System.getenv("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")
+    Cluster.PROD_GCP -> System.getenv("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT")
+    Cluster.LOKAL -> "http://localhost:8080"
+}
+
 val notifikasjonerScope = when(Cluster.current) {
     Cluster.DEV_GCP -> "api://dev-gcp.fager.notifikasjon-produsent-api/.default"
     Cluster.PROD_GCP -> "api://prod-gcp.fager.notifikasjon-produsent-api/.default"
+    Cluster.LOKAL -> "lokal"
 }
 
 val urlTilNotifikasjonIMiljo = when(Cluster.current) {
     Cluster.DEV_GCP -> "https://ag-notifikasjon-produsent-api.dev.nav.no/api/graphql"
     Cluster.PROD_GCP -> "https://ag-notifikasjon-produsent-api.intern.nav.no/api/graphql"
+    Cluster.LOKAL -> "http://localhost:8080"
 }
 
+
+
 val environmentVariables = EnvironmentVariables(
-    System.getenv("AZURE_OPENID_CONFIG_TOKEN_ENDPOINT"),
+    azureADTokenEndpointUrl,
     System.getenv("AZURE_APP_CLIENT_ID"),
     System.getenv("AZURE_APP_JWK"),
     urlTilNotifikasjonIMiljo,

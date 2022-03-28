@@ -2,7 +2,7 @@ package no.nav.permitteringsmelding.notifikasjon
 
 import com.nimbusds.jwt.SignedJWT
 import kotlinx.coroutines.runBlocking
-import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
+import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2ClientImpl
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.setup.getAzureTestAuthProperties
 import no.nav.permitteringsmelding.notifikasjon.setup.issuerConfig
@@ -27,7 +27,7 @@ class AuthenticationTest {
         startLokalApp(issuerConfig = issuerConfig(mockOAuth2Server)).use {
 
             val defaultHttpClient = getDefaultHttpClient()
-            val oauth2Client = Oauth2Client(
+            val oauth2Client = Oauth2ClientImpl(
                 defaultHttpClient,
                 azureAuthProperties
             )
