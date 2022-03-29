@@ -8,7 +8,6 @@ import java.util.*
 data class PermitteringsMelding (
     val id: String,
     val bedriftsnummer: String,
-    val bedriftNavn: String,
     val sendtInnTidspunkt: String,
     val type: String
 )

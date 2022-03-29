@@ -6,15 +6,10 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
-import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
 import no.nav.permitteringsmelding.notifikasjon.setup.Oauth2ClientStub
-import no.nav.permitteringsmelding.notifikasjon.setup.getAzureTestAuthProperties
-import no.nav.permitteringsmelding.notifikasjon.setup.issuerConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import org.junit.Ignore
 import org.junit.Test
 
 class MinSideNotifikasjonerServiceTest {
