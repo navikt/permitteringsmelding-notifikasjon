@@ -20,6 +20,7 @@ class PermitteringsmeldingConsumer(
 
     suspend fun start() {
         try {
+            log.info("forsøker å konsumere topic")
             consumer.subscribe(listOf(permitteringsmeldingtopic))
             log.info("Starter å konsumere topic $permitteringsmeldingtopic med groupId ${consumer.groupMetadata().groupId()}")
             while (true) {
@@ -36,9 +37,11 @@ class PermitteringsmeldingConsumer(
         } catch (exception: WakeupException) {
             log.info("Fikk beskjed om å lukke consument med groupId ${consumer.groupMetadata().groupId()}")
         } catch (exception: Exception) {
+            log.info("Noe gikk galt. Feilet med exception",exception.message)
 
             //Liveness.kill("Noe galt skjedde i konsument", exception)
         } finally {
+            log.info("konsumenten lukkes")
             consumer.close()
         }
     }
