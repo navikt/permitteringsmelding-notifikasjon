@@ -37,7 +37,7 @@ class PermitteringsmeldingConsumer(
         } catch (exception: WakeupException) {
             log.info("Fikk beskjed om å lukke consument med groupId ${consumer.groupMetadata().groupId()}")
         } catch (exception: Exception) {
-            log.info("Noe gikk galt. Feilet med exception",exception.message)
+            log.info("Noe gikk galt. Feilet med exception", exception)
 
             //Liveness.kill("Noe galt skjedde i konsument", exception)
         } finally {
