@@ -7,6 +7,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.kafka.PermitteringsmeldingConsumer
 import no.nav.permitteringsmelding.kafka.consumerConfig
 import no.nav.permitteringsmelding.notifikasjon.utils.log
@@ -33,7 +34,7 @@ class App(private val permitteringsmeldingConsumer: PermitteringsmeldingConsumer
     fun start() {
         // runFlywayMigrations(dataSource)
         server.start()
-        thread {
+        runBlocking {
             permitteringsmeldingConsumer.start();
         }
     }
@@ -57,10 +58,11 @@ fun main() {
     val oauth2Client = Oauth2ClientImpl(httpClient, azureAuthProperties)
 
     val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
-    val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer)
 
     val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)
     val minSideNotifikasjonerService = MinSideNotifikasjonerService(minSideGraphQLKlient)
+
+    val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer, minSideNotifikasjonerService)
 
     App(permitteringsmeldingConsumer).start()
 }

@@ -3,6 +3,7 @@ package no.nav.permitteringsmelding.kafka
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.common.errors.WakeupException
@@ -12,10 +13,11 @@ import java.time.Duration
 
 class PermitteringsmeldingConsumer(
         private val consumer: Consumer<String, String>,
+        private val minSideNotifikasjonerService: MinSideNotifikasjonerService
 ) : Closeable {
     val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-    fun start() {
+    suspend fun start() {
         try {
             consumer.subscribe(listOf(permitteringsmeldingtopic))
             //log.info("Starter å konsumere topic $permitteringsmeldingtopic med groupId ${consumer.groupMetadata().groupId()}")
@@ -26,7 +28,7 @@ class PermitteringsmeldingConsumer(
                 consumer.commitSync()
                 records.forEach{melding ->
                     val permitteringsMelding: PermitteringsMelding = mapper.readValue(melding.value())
-
+                    minSideNotifikasjonerService.opprettNySak(permitteringsMelding.id, permitteringsMelding.type, permitteringsMelding.bedriftsnummer, "tittel", permitteringsMelding.sendtInnTidspunkt)
                 }
                 //log.info("Committet offset ${records.last().offset()} til Kafka")
             }
