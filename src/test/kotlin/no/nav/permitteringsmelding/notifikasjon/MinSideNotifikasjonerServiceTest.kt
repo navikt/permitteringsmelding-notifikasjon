@@ -45,10 +45,7 @@ class MinSideNotifikasjonerServiceTest {
                 val minSideGraphQLKlient = MinSideGraphQLKlient("http://localhost:8080", httpClient, oauth2Client)
                 val minSideNotifikasjonerService = MinSideNotifikasjonerService(minSideGraphQLKlient )
                 minSideNotifikasjonerService.opprettNySak("1234", "Permittering", "1234", "Tittel", "Lenke")
-                println("ohoy")
             }
         }
-
-
     }
 }
