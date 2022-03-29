@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
-import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.NySakVellykket
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import java.net.URL
 
@@ -42,7 +42,18 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
             };
             val nySak = resultat.data?.nySak
             if(nySak !is NySakVellykket) {
-                log.error("Kunne ikke opprette ny sak")
+                if (nySak is UgyldigMerkelapp) {
+                    log.error("Feilmelding {}", nySak.feilmelding)
+                } else if (nySak is UgyldigMottaker) {
+                    log.error("Feilmelding {}", nySak.feilmelding)
+                } else if (nySak is UkjentProdusent) {
+                    log.error("Feilmelding {}", nySak.feilmelding)
+                } else if (nySak is UkjentRolle) {
+                    log.error("Feilmelding {}", nySak.feilmelding)
+                } else if (nySak is DuplikatGrupperingsid) {
+                    log.error("Feilmelding {}", nySak.feilmelding)
+                }
+                log.error("Kunne ikke opprette ny sak", nySak)
             } else {
                 log.info("Opprettet ny sak {}", nySak.id)
             }
