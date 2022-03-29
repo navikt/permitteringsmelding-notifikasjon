@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
+import no.nav.permitteringsmelding.notifikasjon.utils.log
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.common.errors.WakeupException
@@ -20,7 +21,7 @@ class PermitteringsmeldingConsumer(
     suspend fun start() {
         try {
             consumer.subscribe(listOf(permitteringsmeldingtopic))
-            //log.info("Starter å konsumere topic $permitteringsmeldingtopic med groupId ${consumer.groupMetadata().groupId()}")
+            log.info("Starter å konsumere topic $permitteringsmeldingtopic med groupId ${consumer.groupMetadata().groupId()}")
             while (true) {
                 val records: ConsumerRecords<String, String> = consumer.poll(Duration.ofSeconds(5))
 
@@ -33,7 +34,7 @@ class PermitteringsmeldingConsumer(
                 //log.info("Committet offset ${records.last().offset()} til Kafka")
             }
         } catch (exception: WakeupException) {
-            //log.info("Fikk beskjed om å lukke consument med groupId ${consumer.groupMetadata().groupId()}")
+            log.info("Fikk beskjed om å lukke consument med groupId ${consumer.groupMetadata().groupId()}")
         } catch (exception: Exception) {
 
             //Liveness.kill("Noe galt skjedde i konsument", exception)
