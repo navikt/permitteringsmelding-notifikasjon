@@ -58,6 +58,7 @@ fun main() {
     val httpClient = getDefaultHttpClient()
     val oauth2Client = Oauth2ClientImpl(httpClient, azureAuthProperties)
 
+
     val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
 
     val minSideGraphQLKlient = MinSideGraphQLKlient(environmentVariables.urlTilNotifikasjonIMiljo, httpClient, oauth2Client)
