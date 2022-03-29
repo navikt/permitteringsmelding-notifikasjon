@@ -42,18 +42,14 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
             };
             val nySak = resultat.data?.nySak
             if(nySak !is NySakVellykket) {
-                if (nySak is UgyldigMerkelapp) {
-                    log.error("Feilmelding {}", nySak.feilmelding)
-                } else if (nySak is UgyldigMottaker) {
-                    log.error("Feilmelding {}", nySak.feilmelding)
-                } else if (nySak is UkjentProdusent) {
-                    log.error("Feilmelding {}", nySak.feilmelding)
-                } else if (nySak is UkjentRolle) {
-                    log.error("Feilmelding {}", nySak.feilmelding)
-                } else if (nySak is DuplikatGrupperingsid) {
-                    log.error("Feilmelding {}", nySak.feilmelding)
+                when (nySak) {
+                    is DuplikatGrupperingsid -> log.error("Feilmelding {}", nySak.feilmelding)
+                    is UgyldigMerkelapp -> log.error("Feilmelding {}", nySak.feilmelding)
+                    is UgyldigMottaker -> log.error("Feilmelding {}", nySak.feilmelding)
+                    is UkjentProdusent -> log.error("Feilmelding {}", nySak.feilmelding)
+                    is UkjentRolle -> log.error("Feilmelding {}", nySak.feilmelding)
+                    else -> log.error("Kunne ikke opprette ny sak for permitteringsmelding {}", grupperingsid)
                 }
-                log.error("Kunne ikke opprette ny sak", nySak)
             } else {
                 log.info("Opprettet ny sak {}", nySak.id)
             }
