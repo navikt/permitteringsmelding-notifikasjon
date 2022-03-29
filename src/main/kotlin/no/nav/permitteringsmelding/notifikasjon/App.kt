@@ -15,6 +15,7 @@ import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2ClientImpl
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.getDefaultHttpClient
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.graphql.MinSideGraphQLKlient
+import no.nav.permitteringsmelding.notifikasjon.utils.environmentVariables
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -59,7 +60,7 @@ fun main() {
 
     val consumer: Consumer<String, String> = KafkaConsumer<String, String>(consumerConfig())
 
-    val minSideGraphQLKlient = MinSideGraphQLKlient("localhost", httpClient, oauth2Client)
+    val minSideGraphQLKlient = MinSideGraphQLKlient(environmentVariables.urlTilNotifikasjonIMiljo, httpClient, oauth2Client)
     val minSideNotifikasjonerService = MinSideNotifikasjonerService(minSideGraphQLKlient)
 
     val permitteringsmeldingConsumer: PermitteringsmeldingConsumer = PermitteringsmeldingConsumer(consumer, minSideNotifikasjonerService)
