@@ -5,31 +5,23 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-class PermitteringsMelding {
-    private val id: UUID? = null
-    private val bedriftsnummer: String? = null
-    private val bedriftNavn: String? = null
+data class PermitteringsMelding (
+    val id: String? = null,
+    val bedriftsnummer: String? = null,
+    val bedriftNavn: String? = null,
+    val sendtInnTidspunkt: String? = null,
+    val type: String? = null,
+    val kontaktNavn: String? = null,
+    val kontaktTlf: String? = null,
+    val kontaktEpost: String? = null,
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private val sendtInnTidspunkt: LocalDateTime? = null
-    private val type: String? = null
-    private val kontaktNavn: String? = null
-    private val kontaktTlf: String? = null
-    private val kontaktEpost: String? = null
+    val varsletAnsattDato: String? = null,
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private val varsletAnsattDato: LocalDate? = null
+    val varsletNavDato: String? = null,
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private val varsletNavDato: LocalDate? = null
+    val startDato: String? = null,
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private val startDato: LocalDate? = null
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private val sluttDato: LocalDate? = null
-    private val fritekst: String? = null
-    private val antallBerorte = 0
-    private val kommuneNummer: String? = null
-    private val behandlendeEnhet: String? = null
-}
+    val sluttDato: String? = null,
+    val fritekst: String? = null,
+    val antallBerorte: Number? = 0
+)

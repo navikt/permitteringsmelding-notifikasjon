@@ -1,8 +1,8 @@
 package no.nav.permitteringsmelding.kafka
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.permitteringsmelding.notifikasjon.minsideklient.PermitteringsMelding
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.common.errors.WakeupException
@@ -13,7 +13,7 @@ import java.time.Duration
 class PermitteringsmeldingConsumer(
         private val consumer: Consumer<String, String>,
 ) : Closeable {
-    val mapper = jacksonObjectMapper()
+    val mapper = jacksonObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
     fun start() {
         try {
@@ -25,7 +25,8 @@ class PermitteringsmeldingConsumer(
                 if (records.count() == 0) continue
                 consumer.commitSync()
                 records.forEach{melding ->
-                    val permitteringsMelding: PermitteringsMelding = mapper.readValue(melding.toString())
+                    val permitteringsMelding: PermitteringsMelding = mapper.readValue(melding.value())
+
                 }
                 //log.info("Committet offset ${records.last().offset()} til Kafka")
             }
