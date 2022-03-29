@@ -31,7 +31,7 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
         runBlocking {
             val query = OpprettNySak(variables = OpprettNySak.Variables(
                 grupperingsid,
-                merkelapp,
+                "Permittering",
                 virksomhetsnummer,
                 tittel,
                 lenke,
