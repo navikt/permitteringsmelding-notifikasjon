@@ -10,7 +10,18 @@ mutation OpprettNySak(
         grupperingsid: $grupperingsid,
         merkelapp: $merkelapp,
         virksomhetsnummer: $virksomhetsnummer,
-        mottakere: [],
+        mottakere: [
+            {
+                altinnRolle: {
+                    roleDefinitionCode: "DAGL"
+                }
+            }
+            {
+                altinnRolle: {
+                    roleDefinitionCode: "LEDE"
+                }
+            }
+        ],
         tittel: $tittel,
         lenke: $lenke,
         initiell_status: UNDER_BEHANDLING

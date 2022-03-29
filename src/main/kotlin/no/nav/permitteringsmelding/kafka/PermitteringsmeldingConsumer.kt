@@ -11,7 +11,6 @@ import org.apache.kafka.common.errors.WakeupException
 import java.io.Closeable
 import java.time.Duration
 
-
 class PermitteringsmeldingConsumer(
         private val consumer: Consumer<String, String>,
         private val minSideNotifikasjonerService: MinSideNotifikasjonerService
