@@ -1,6 +1,7 @@
 # permitteringsmelding-notifikasjon
 
-Sender notifikasjoner via Min Side Arbeidsgiver om permitteringsmeldinger.
+Applikasjon som sender permitteringsmeldinger som saker til Min Side Arbeidsgiver. Bruker eksisterende kafka-topic med meldinger om permitteringer,
+masseoppsigelse og nedbemanning.
 
 ## Kjøre lokalt
 
