@@ -30,7 +30,11 @@ val urlTilNotifikasjonIMiljo = when(Cluster.current) {
     Cluster.LOKAL -> "http://localhost:8080"
 }
 
-
+val urlTilPermitteringsløsningFrontend= when(Cluster.current) {
+    Cluster.DEV_GCP -> "https://permitteringsskjema.dev.nav.no/permittering/skjema/kvitteringsside/"
+    Cluster.PROD_GCP -> "https://arbeidsgiver.nav.no/permittering/skjema/kvitteringsside/"
+    Cluster.LOKAL -> "http://localhost:8080"
+}
 
 val environmentVariables = EnvironmentVariables(
     azureADTokenEndpointUrl,

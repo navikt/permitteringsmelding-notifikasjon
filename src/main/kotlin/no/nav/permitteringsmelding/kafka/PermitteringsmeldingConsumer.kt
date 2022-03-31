@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService
 import no.nav.permitteringsmelding.notifikasjon.utils.log
+import no.nav.permitteringsmelding.notifikasjon.utils.urlTilPermitteringsløsningFrontend
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.common.errors.WakeupException
@@ -29,7 +30,7 @@ class PermitteringsmeldingConsumer(
                 consumer.commitSync()
                 records.forEach{melding ->
                     val permitteringsMelding: PermitteringsMelding = mapper.readValue(melding.value())
-                    minSideNotifikasjonerService.opprettNySak(permitteringsMelding.id, permitteringsMelding.type, permitteringsMelding.bedriftsnummer, "tittel", permitteringsMelding.sendtInnTidspunkt)
+                    minSideNotifikasjonerService.opprettNySak(permitteringsMelding.id, permitteringsMelding.type, permitteringsMelding.bedriftsnummer, "Melding motatt", urlTilPermitteringsløsningFrontend+ permitteringsMelding.id,permitteringsMelding.sendtInnTidspunkt)
                 }
                 //log.info("Committet offset ${records.last().offset()} til Kafka")
             }
