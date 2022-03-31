@@ -30,7 +30,7 @@ class PermitteringsmeldingConsumer(
                 consumer.commitSync()
                 records.forEach{melding ->
                     val permitteringsMelding: PermitteringsMelding = mapper.readValue(melding.value())
-                    minSideNotifikasjonerService.opprettNySak(permitteringsMelding.id, permitteringsMelding.type, permitteringsMelding.bedriftsnummer, "Melding motatt", urlTilPermitteringsløsningFrontend+ permitteringsMelding.id,permitteringsMelding.sendtInnTidspunkt)
+                    minSideNotifikasjonerService.opprettNySak(permitteringsMelding.id, permitteringsMelding.type, permitteringsMelding.bedriftsnummer, "Melding mottatt, gratulerer", urlTilPermitteringsløsningFrontend+ permitteringsMelding.id,permitteringsMelding.sendtInnTidspunkt)
                 }
                 //log.info("Committet offset ${records.last().offset()} til Kafka")
             }
