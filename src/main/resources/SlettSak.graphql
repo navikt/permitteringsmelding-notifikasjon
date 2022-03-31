@@ -1,0 +1,23 @@
+mutation SlettSak(
+    $grupperingsId: ID!
+    $merkelapp: String!
+) {
+    hardDeleteNotifikasjonByEksternId(
+        merkelapp: $merkelapp,
+        eksternId: $grupperingsId)
+    {
+        __typename
+        ... on HardDeleteNotifikasjonVellykket {
+            id
+        }
+        ... on NotifikasjonFinnesIkke {
+            feilmelding
+        }
+        ... on UgyldigMerkelapp {
+            feilmelding
+        }
+        ... on UkjentProdusent {
+            feilmelding
+        }
+    }
+}

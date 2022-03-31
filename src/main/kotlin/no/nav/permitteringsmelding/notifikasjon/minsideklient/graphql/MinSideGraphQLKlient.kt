@@ -9,6 +9,8 @@ import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.SlettSak
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.slettsak.HardDeleteNotifikasjonVellykket
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import java.net.URL
 
@@ -36,10 +38,10 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
                 tittel,
                 lenke,
                 tidspunkt
-            ));
+            ))
             val resultat = client.execute(query) {
                 header(HttpHeaders.Authorization, "Bearer $scopedAccessToken")
-            };
+            }
             val nySak = resultat.data?.nySak
             if(nySak !is NySakVellykket) {
                 when (nySak) {
@@ -55,5 +57,33 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
             }
         }
         return
+    }
+
+    suspend fun slettSak(grupperingsid: String, merkelapp: String) {
+        val scopedAccessToken = oauth2Client.machine2machine().accessToken
+
+        val client = GraphQLKtorClient(
+            url = URL(endpoint),
+            httpClient = httpClient
+        )
+
+        runBlocking {
+            val query = SlettSak(
+                variables = SlettSak.Variables(
+                    grupperingsid,
+                    "Permittering"
+                )
+            )
+
+            val resultat = client.execute(query) {
+                header(HttpHeaders.Authorization, "Bearer $scopedAccessToken")
+            }
+            val hardDeleteNotifikasjonByEksternId = resultat.data?.hardDeleteNotifikasjonByEksternId
+            if (hardDeleteNotifikasjonByEksternId !is HardDeleteNotifikasjonVellykket) {
+                log.info("Kunne ikke slette sak {}", grupperingsid)
+            } else {
+                log.info("Slettet sak {}", hardDeleteNotifikasjonByEksternId.id)
+            }
+        }
     }
 }
