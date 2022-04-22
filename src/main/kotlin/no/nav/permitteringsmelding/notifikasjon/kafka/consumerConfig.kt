@@ -1,4 +1,4 @@
-package no.nav.permitteringsmelding.kafka
+package no.nav.permitteringsmelding.notifikasjon.kafka
 
 import no.nav.permitteringsmelding.notifikasjon.utils.environmentVariables
 import org.apache.kafka.clients.CommonClientConfigs

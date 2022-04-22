@@ -1,4 +1,4 @@
-package no.nav.permitteringsmelding.kafka
+package no.nav.permitteringsmelding.notifikasjon.kafka
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper

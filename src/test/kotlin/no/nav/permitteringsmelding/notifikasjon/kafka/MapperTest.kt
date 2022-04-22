@@ -3,7 +3,7 @@ package no.nav.permitteringsmelding.notifikasjon.kafka
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.nav.permitteringsmelding.kafka.PermitteringsMelding
+import no.nav.permitteringsmelding.notifikasjon.kafka.PermitteringsMelding
 import org.junit.Test
 import kotlin.test.assertEquals
 

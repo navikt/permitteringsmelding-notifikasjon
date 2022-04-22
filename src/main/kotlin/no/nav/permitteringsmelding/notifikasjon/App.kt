@@ -8,8 +8,8 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import kotlinx.coroutines.runBlocking
-import no.nav.permitteringsmelding.kafka.PermitteringsmeldingConsumer
-import no.nav.permitteringsmelding.kafka.consumerConfig
+import no.nav.permitteringsmelding.notifikasjon.kafka.PermitteringsmeldingConsumer
+import no.nav.permitteringsmelding.notifikasjon.kafka.consumerConfig
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2ClientImpl
 import no.nav.permitteringsmelding.notifikasjon.minsideklient.MinSideNotifikasjonerService

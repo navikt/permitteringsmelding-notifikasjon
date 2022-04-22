@@ -1,4 +1,4 @@
-package no.nav.permitteringsmelding.kafka
+package no.nav.permitteringsmelding.notifikasjon.kafka
 
 data class PermitteringsMelding (
     val id: String,

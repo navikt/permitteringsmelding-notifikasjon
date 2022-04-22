@@ -1,6 +1,6 @@
 package no.nav.permitteringsmelding.notifikasjon
 
-import no.nav.permitteringsmelding.kafka.PermitteringsmeldingConsumer
+import no.nav.permitteringsmelding.notifikasjon.kafka.PermitteringsmeldingConsumer
 import no.nav.permitteringsmelding.notifikasjon.setup.issuerConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.token.support.ktor.IssuerConfig
