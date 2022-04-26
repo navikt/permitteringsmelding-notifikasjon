@@ -9,8 +9,6 @@ import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
-import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.SlettSak
-import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.slettsak.HardDeleteNotifikasjonVellykket
 import no.nav.permitteringsmelding.notifikasjon.utils.log
 import java.net.URL
 
