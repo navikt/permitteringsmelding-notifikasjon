@@ -20,11 +20,4 @@ class MinSideNotifikasjonerService(private val minSideGraphQLClient : MinSideGra
             tidspunkt
         )
     }
-
-    suspend fun slettSak(grupperingsid: String, merkelapp: String) {
-        minSideGraphQLClient.slettSak(
-            grupperingsid,
-            merkelapp
-        )
-    }
 }

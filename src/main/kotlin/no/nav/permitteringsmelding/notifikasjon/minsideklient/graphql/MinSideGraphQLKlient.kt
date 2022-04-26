@@ -58,32 +58,4 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
         }
         return
     }
-
-    suspend fun slettSak(grupperingsid: String, merkelapp: String) {
-        val scopedAccessToken = oauth2Client.machine2machine().accessToken
-
-        val client = GraphQLKtorClient(
-            url = URL(endpoint),
-            httpClient = httpClient
-        )
-
-        runBlocking {
-            val query = SlettSak(
-                variables = SlettSak.Variables(
-                    grupperingsid,
-                    "Permittering"
-                )
-            )
-
-            val resultat = client.execute(query) {
-                header(HttpHeaders.Authorization, "Bearer $scopedAccessToken")
-            }
-            val hardDeleteNotifikasjonByEksternId = resultat.data?.hardDeleteNotifikasjonByEksternId
-            if (hardDeleteNotifikasjonByEksternId !is HardDeleteNotifikasjonVellykket) {
-                log.info("Kunne ikke slette sak {}", grupperingsid)
-            } else {
-                log.info("Slettet sak {}", hardDeleteNotifikasjonByEksternId.id)
-            }
-        }
-    }
 }

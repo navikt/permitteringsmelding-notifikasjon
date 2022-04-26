@@ -7,6 +7,9 @@ mutation OpprettNySak(
     $tidspunkt: ISO8601DateTime
 ) {
     nySak(
+        hardDelete: {
+            om: "P2Y"
+        }
         grupperingsid: $grupperingsid,
         merkelapp: $merkelapp,
         virksomhetsnummer: $virksomhetsnummer,
