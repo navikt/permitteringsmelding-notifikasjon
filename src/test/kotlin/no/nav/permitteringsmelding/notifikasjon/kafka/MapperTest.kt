@@ -34,7 +34,7 @@ class MapperTest {
         val meldingType = MeldingType.valueOf(permitteringsmelding.type)
 
         assertEquals(permitteringsmelding.bedriftsnummer, "910825526")
-        assertEquals(meldingType.merkelapp, "Masseoppsigelse")
+        assertEquals(meldingType.merkelapp, "Nedbemanning")
     }
 
 }
