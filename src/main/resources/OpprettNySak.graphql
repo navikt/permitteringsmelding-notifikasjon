@@ -27,7 +27,7 @@ mutation OpprettNySak(
         ],
         tittel: $tittel,
         lenke: $lenke,
-        initiell_status: UNDER_BEHANDLING
+        initiellStatus: UNDER_BEHANDLING
         tidspunkt: $tidspunkt
     )
     {
