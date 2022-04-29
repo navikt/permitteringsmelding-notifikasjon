@@ -24,6 +24,11 @@ mutation OpprettNySak(
                     roleDefinitionCode: "LEDE"
                 }
             }
+            {
+                altinnRolle: {
+                    roleDefinitionCode: "REGN"
+                }
+            }
         ],
         tittel: $tittel,
         lenke: $lenke,
