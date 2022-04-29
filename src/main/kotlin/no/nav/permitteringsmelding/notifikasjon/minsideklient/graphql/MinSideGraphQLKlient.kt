@@ -41,6 +41,7 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
                 header(HttpHeaders.Authorization, "Bearer $scopedAccessToken")
             }
             val nySak = resultat.data?.nySak
+
             if(nySak !is NySakVellykket) {
                 when (nySak) {
                     is DuplikatGrupperingsid -> log.error("Feilmelding {}", nySak.feilmelding)
@@ -48,7 +49,12 @@ class MinSideGraphQLKlient(val endpoint: String, val httpClient: HttpClient, val
                     is UgyldigMottaker -> log.error("Feilmelding {}", nySak.feilmelding)
                     is UkjentProdusent -> log.error("Feilmelding {}", nySak.feilmelding)
                     is UkjentRolle -> log.error("Feilmelding {}", nySak.feilmelding)
-                    else -> log.error("Kunne ikke opprette ny sak for permitteringsmelding {}", grupperingsid)
+                    else -> {
+                        resultat.errors?.forEach {
+                            log.error("Error: {}", it.message)
+                        }
+                        log.error("Kunne ikke opprette ny sak for permitteringsmelding {}", grupperingsid)
+                    }
                 }
             } else {
                 log.info("Opprettet ny sak {}", nySak.id)

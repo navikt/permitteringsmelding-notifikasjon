@@ -8,7 +8,7 @@ mutation OpprettNySak(
 ) {
     nySak(
         hardDelete: {
-            om: "P2Y"
+            om: "PT17520H"
         }
         grupperingsid: $grupperingsid,
         merkelapp: $merkelapp,
