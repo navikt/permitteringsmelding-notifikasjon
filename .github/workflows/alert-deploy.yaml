@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: nais/deploy/actions/deploy@v1
         env:
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_PERMITTERING_OG_NEDBEMANNING }}
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
           CLUSTER: dev-gcp
           RESOURCE: nais/alerts.yaml
 
@@ -28,6 +28,6 @@ jobs:
 #      - uses: actions/checkout@v2
 #      - uses: nais/deploy/actions/deploy@v1
 #        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY_PERMITTERING_OG_NEDBEMANNING }}
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
 #          CLUSTER: prod-gcp
 #          RESOURCE: nais/alerts.yaml
