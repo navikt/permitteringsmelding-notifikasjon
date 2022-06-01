@@ -40,7 +40,7 @@ jobs:
   deploy-to-dev:
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/sletter-nais-miljovaribler'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -50,7 +50,6 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: nais/nais.yaml
           VAR: version=${{ env.docker_image }}
-          VARS: nais/nais-dev.json
           PRINT_PAYLOAD: true
 
 #  deploy-to-prod:
