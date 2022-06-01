@@ -1,0 +1,33 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: permitteringsmelding-notifikasjon
+  namespace: permittering-og-nedbemanning
+  labels:
+    team: permittering-og-nedbemanning
+spec:
+  image: {{ version }}
+  port: 8080
+  replicas:
+    min: 1
+    max: 1
+  liveness:
+    path: /permitteringsmelding-notifikasjon/internal/isAlive
+  readiness:
+    path: /permitteringsmelding-notifikasjon/internal/isReady
+  gcp:
+    sqlInstances:
+      - name: permitteringsmelding-notifikasjon
+        type: POSTGRES_12
+        databases:
+          - name: permitteringsmelding-notifikasjon-db
+  kafka:
+    pool: nav-prod
+  accessPolicy:
+    outbound:
+      rules:
+        - application: notifikasjon-produsent-api
+          namespace: fager
+  azure:
+    application:
+      enabled: true
