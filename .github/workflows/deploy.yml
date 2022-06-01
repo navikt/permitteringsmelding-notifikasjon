@@ -48,9 +48,8 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
           CLUSTER: dev-gcp
-          RESOURCE: nais/nais.yaml
+          RESOURCE: nais/dev-gcp.yaml
           VAR: version=${{ env.docker_image }}
-          VARS: nais/nais-dev.json
           PRINT_PAYLOAD: true
 
 #  deploy-to-prod:
@@ -64,9 +63,8 @@ jobs:
 #        env:
 #          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
 #          CLUSTER: prod-gcp
-#          RESOURCE: nais/nais.yaml
+#          RESOURCE: nais/prod-gcp.yaml
 #          VAR: image=${{ env.docker_image }}
-#          VARS: nais/prod.json
 #          PRINT_PAYLOAD: true
 
 #  deploy-alerts:
