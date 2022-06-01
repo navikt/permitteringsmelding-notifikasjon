@@ -40,7 +40,7 @@ jobs:
   deploy-to-dev:
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/endret-deploy-oppsett'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
