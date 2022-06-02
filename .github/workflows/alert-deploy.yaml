@@ -21,13 +21,13 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: nais/alerts.yaml
 
-#  deploy-alerts-prod:
-#    name: Deploy alerts til prod gcp
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: nais/deploy/actions/deploy@v1
-#        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
-#          CLUSTER: prod-gcp
-#          RESOURCE: nais/alerts.yaml
+  deploy-alerts-prod:
+    name: Deploy alerts til prod gcp
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
+          CLUSTER: prod-gcp
+          RESOURCE: nais/alerts.yaml
