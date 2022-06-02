@@ -40,7 +40,7 @@ jobs:
   deploy-to-dev:
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/endret-deploy-oppsett'
+    if: github.ref == 'refs/heads/legg-til-servicekode'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -52,20 +52,20 @@ jobs:
           VAR: version=${{ env.docker_image }}
           PRINT_PAYLOAD: true
 
-#  deploy-to-prod:
-#    name: Deploy to prod
-#    needs: deploy-to-dev
-#    if: github.ref == 'refs/heads/main'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v1
-#      - uses: nais/deploy/actions/deploy@v1
-#        env:
-#          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
-#          CLUSTER: prod-gcp
-#          RESOURCE: nais/prod-gcp.yaml
-#          VAR: image=${{ env.docker_image }}
-#          PRINT_PAYLOAD: true
+  deploy-to-prod:
+    name: Deploy to prod
+    needs: deploy-to-dev
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
+          CLUSTER: prod-gcp
+          RESOURCE: nais/prod-gcp.yaml
+          VAR: version=${{ env.docker_image }}
+          PRINT_PAYLOAD: true
 
 #  deploy-alerts:
 #    name: Deploy alerts to prod

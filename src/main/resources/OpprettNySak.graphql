@@ -15,18 +15,9 @@ mutation OpprettNySak(
         virksomhetsnummer: $virksomhetsnummer,
         mottakere: [
             {
-                altinnRolle: {
-                    roleDefinitionCode: "DAGL"
-                }
-            }
-            {
-                altinnRolle: {
-                    roleDefinitionCode: "LEDE"
-                }
-            }
-            {
-                altinnRolle: {
-                    roleDefinitionCode: "REGN"
+                altinn: {
+                    serviceCode: "5810"
+                    serviceEdition: "1"
                 }
             }
         ],
