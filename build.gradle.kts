@@ -33,10 +33,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
     implementation("com.graphql-java:graphql-java:16.2")
-    implementation("org.flywaydb:flyway-core:8.0.3")
-    implementation("com.zaxxer:HikariCP:5.0.0")
-    implementation("com.github.seratch:kotliquery:1.6.1")
-    implementation("com.h2database:h2:1.4.200")
     implementation("no.nav.security:token-validation-ktor:1.3.10")
     implementation("no.nav.security:token-client-core:1.3.10")
 
