@@ -25,8 +25,8 @@ val notifikasjonerScope = when(Cluster.current) {
 }
 
 val urlTilNotifikasjonIMiljo = when(Cluster.current) {
-    Cluster.DEV_GCP -> "https://ag-notifikasjon-produsent-api.dev.nav.no/api/graphql"
-    Cluster.PROD_GCP -> "https://ag-notifikasjon-produsent-api.intern.nav.no/api/graphql"
+    Cluster.DEV_GCP -> "http://notifikasjon-produsent-api.fager/api/graphql"
+    Cluster.PROD_GCP -> "http://notifikasjon-produsent-api.fager/api/graphql"
     Cluster.LOKAL -> "http://localhost:8080"
 }
 
