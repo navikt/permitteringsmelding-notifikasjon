@@ -1,9 +1,13 @@
 package no.nav.permitteringsmelding.notifikasjon.autentisering
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.DeserializationFeature
 import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.features.json.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
-import no.nav.permitteringsmelding.notifikasjon.utils.environmentVariables
+import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
 import no.nav.security.token.support.client.core.OAuth2GrantType
 import no.nav.security.token.support.client.core.OAuth2ParameterNames
@@ -16,10 +20,19 @@ interface Oauth2Client{
 }
 
 class Oauth2ClientImpl(
-    private val httpClient: HttpClient,
-    private val azureAuthProperties: ClientAuthenticationProperties) : Oauth2Client {
+    private val azureAuthProperties: ClientAuthenticationProperties
+) : Oauth2Client {
 
-    suspend fun machine2machine(tokenEndpointUrl: String, scope: String) :OAuth2AccessTokenResponse {
+    private val httpClient= HttpClient(CIO) {
+        install(JsonFeature) {
+            serializer = JacksonSerializer {
+                configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            }
+        }
+    }
+
+    suspend fun machine2machine(tokenEndpointUrl: String, scope: String): OAuth2AccessTokenResponse {
         val grant = GrantRequest.machine2machine(scope)
         return httpClient.tokenRequest(
             tokenEndpointUrl,
@@ -29,8 +42,8 @@ class Oauth2ClientImpl(
     }
 
     override suspend fun machine2machine(): OAuth2AccessTokenResponse {
-        val tokenEndpointUrl = environmentVariables.azureADTokenEndpointUrl
-        val scope = environmentVariables.notifikasjonerScope
+        val tokenEndpointUrl = Env.azureADTokenEndpointUrl
+        val scope = Env.notifikasjonerScope
         return machine2machine(tokenEndpointUrl, scope)
     }
 }
