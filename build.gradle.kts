@@ -30,6 +30,8 @@ dependencies {
     implementation("io.ktor:ktor-serialization:$ktor_version")
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
     implementation("io.ktor:ktor-client-jackson:$ktor_version")
+    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
     implementation("ch.qos.logback:logback-classic:1.2.6")
     implementation("net.logstash.logback:logstash-logback-encoder:6.6")
     implementation("com.graphql-java:graphql-java:16.2")
