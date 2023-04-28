@@ -36,6 +36,7 @@ object App {
         minsideraphQLKlient: MinSideGraphQLKlient,
     ) {
         runBlocking(Dispatchers.Default) {
+
             launch {
                 consumer.forEach { record ->
                     val permitteringsMelding = record.value()
@@ -51,57 +52,57 @@ object App {
                 }
             }
 
-            launchHttpServer(httpPort) {
-                install(MicrometerMetrics) {
-                    registry = Metrics.meterRegistry
-                    distributionStatisticConfig = DistributionStatisticConfig.Builder()
-                        .percentilesHistogram(true)
-                        .build()
-                    meterBinders = listOf(
-                        ClassLoaderMetrics(),
-                        JvmMemoryMetrics(),
-                        JvmGcMetrics(),
-                        ProcessorMetrics(),
-                        JvmThreadMetrics(),
-                        LogbackMetrics()
-                    )
-                }
-
-                routing {
-                    route("internal") {
-                        get("alive") {
-                            if (Health.alive) {
-                                call.respond(HttpStatusCode.OK)
-                            } else {
-                                call.respond(
-                                    HttpStatusCode.ServiceUnavailable,
-                                    Health.subsystemAlive.toString()
-                                )
+            launch {
+                embeddedServer(Netty, port = httpPort) {
+                    install(MicrometerMetrics) {
+                        registry = Metrics.meterRegistry
+                        distributionStatisticConfig = DistributionStatisticConfig.Builder()
+                            .percentilesHistogram(true)
+                            .build()
+                        meterBinders = listOf(
+                            ClassLoaderMetrics(),
+                            JvmMemoryMetrics(),
+                            JvmGcMetrics(),
+                            ProcessorMetrics(),
+                            JvmThreadMetrics(),
+                            LogbackMetrics()
+                        )
+                    }
+                    routing {
+                        route("internal") {
+                            get("alive") {
+                                if (Health.alive) {
+                                    call.respond(HttpStatusCode.OK)
+                                } else {
+                                    call.respond(
+                                        HttpStatusCode.ServiceUnavailable,
+                                        Health.subsystemAlive.toString()
+                                    )
+                                }
                             }
-                        }
-                        get("ready") {
-                            if (Health.ready) {
-                                call.respond(HttpStatusCode.OK)
-                            } else {
-                                call.respond(
-                                    HttpStatusCode.ServiceUnavailable,
-                                    Health.subsystemReady.toString()
-                                )
+                            get("ready") {
+                                if (Health.ready) {
+                                    call.respond(HttpStatusCode.OK)
+                                } else {
+                                    call.respond(
+                                        HttpStatusCode.ServiceUnavailable,
+                                        Health.subsystemReady.toString()
+                                    )
+                                }
                             }
-                        }
-                        get("metrics") {
-                            withContext(coroutineContext + metricsDispatcher) {
-                                call.respondText(Metrics.meterRegistry.scrape())
+                            get("metrics") {
+                                withContext(coroutineContext + metricsDispatcher) {
+                                    call.respondText(Metrics.meterRegistry.scrape())
+                                }
                             }
                         }
                     }
-                }
+                }.start(wait = true)
             }
         }
     }
 }
 
-// Brukes når appen kjører på Nais
 fun main() {
     App.main(
         httpPort = 8080,
@@ -124,13 +125,3 @@ fun main() {
     )
 }
 
-fun CoroutineScope.launchHttpServer(
-    httpPort: Int,
-    application: Application.() -> Unit,
-) {
-    launch {
-        embeddedServer(Netty, port = httpPort) {
-            application()
-        }.start(wait = true)
-    }
-}
