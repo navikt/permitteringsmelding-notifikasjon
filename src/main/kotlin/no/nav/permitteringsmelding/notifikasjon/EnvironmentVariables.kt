@@ -21,7 +21,7 @@ object Env {
 
     val urlTilPermitteringsløsningFrontend = basedOnEnv(
         prod = { "https://arbeidsgiver.nav.no/permittering/skjema/kvitteringsside/" },
-        dev = { "https://permitteringsskjema.dev.nav.no/permittering/skjema/kvitteringsside/" },
+        dev = { "https://permitteringsskjema.intern.dev.nav.no/permittering/skjema/kvitteringsside/" },
         other = { "http://localhost:8080" },
     )
 }
