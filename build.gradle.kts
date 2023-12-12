@@ -1,9 +1,13 @@
 import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 
+group = "no.nav.permitteringsmelding.notifikasjon"
+version = "1.0.0"
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.21"
     id("com.expediagroup.graphql") version "5.2.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.5.31"
+    id("org.cyclonedx.bom") version "1.7.4"
 }
 
 repositories {
@@ -68,4 +72,15 @@ tasks.assemble {
         if (!file.exists())
             it.copyTo(file)
     }
+}
+
+tasks.build {
+    dependsOn("cyclonedxBom")
+}
+
+tasks.cyclonedxBom {
+    setIncludeConfigs(listOf("runtimeClasspath"))
+    setSkipConfigs(listOf("compileClasspath", "testCompileClasspath"))
+    setSkipProjects(listOf(rootProject.name))
+    setOutputFormat("json")
 }
