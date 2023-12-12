@@ -1,4 +1,6 @@
-FROM navikt/java:17
-COPY ./build/libs/permitteringsmelding-notifikasjon-all.jar app.jar
+FROM ghcr.io/navikt/baseimages/temurin:17
 
-EXPOSE 8080
+COPY build/permitteringsmelding-notifikasjon.jar app.jar
+COPY build/libs libs
+
+USER apprunner

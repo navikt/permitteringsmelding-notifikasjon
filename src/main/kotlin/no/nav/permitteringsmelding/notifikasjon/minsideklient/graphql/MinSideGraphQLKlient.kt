@@ -5,21 +5,22 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.jackson.*
+import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
-import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.permitteringsmelding.notifikasjon.log
 import java.net.URL
 
 
 private val defaultHttpClient = HttpClient(CIO) {
-    install(JsonFeature) {
-        serializer = JacksonSerializer {
+    install(ContentNegotiation) {
+        jackson {
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             setSerializationInclusion(JsonInclude.Include.NON_NULL)
         }
