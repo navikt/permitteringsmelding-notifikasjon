@@ -32,7 +32,7 @@ jobs:
       id-token: "write"
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/fix_url'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/oppgrader_dependencies'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
