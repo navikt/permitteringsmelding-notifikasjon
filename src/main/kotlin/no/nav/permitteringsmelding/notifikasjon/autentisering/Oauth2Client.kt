@@ -3,10 +3,12 @@ package no.nav.permitteringsmelding.notifikasjon.autentisering
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import io.ktor.serialization.jackson.*
 import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.security.token.support.client.core.ClientAuthenticationProperties
 import no.nav.security.token.support.client.core.OAuth2GrantType
@@ -24,8 +26,8 @@ class Oauth2ClientImpl(
 ) : Oauth2Client {
 
     private val httpClient= HttpClient(CIO) {
-        install(JsonFeature) {
-            serializer = JacksonSerializer {
+        install(ContentNegotiation) {
+            jackson {
                 configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 setSerializationInclusion(JsonInclude.Include.NON_NULL)
             }
@@ -80,7 +82,7 @@ internal suspend fun HttpClient.tokenRequest(
                 append(it.key, it.value)
             }
         }
-    )
+    ).body()!!
 
 private fun ParametersBuilder.appendClientAuthParams(
     tokenEndpointUrl: String,

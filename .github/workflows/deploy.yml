@@ -11,21 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v4
         with:
-          java-version: '13.x'
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      - name: Run tests
-        run: ./gradlew test --info
-      - name: Build jar with Gradle
-        run: ./gradlew shadowJar
+          java-version: '17.x'
+          distribution: temurin
+          cache: gradle
+      - run: ./gradlew build --no-daemon --info
       - uses: nais/docker-build-push@v0
         id: gar-push
         with:
@@ -33,6 +24,7 @@ jobs:
           tag: ${{ github.sha }}
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+          byosbom: build/reports/bom.json
 
   deploy-to-dev:
     permissions:
@@ -40,7 +32,7 @@ jobs:
       id-token: "write"
     name: Deploy to dev
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/fix_url'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/oppgrader_dependencies'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
