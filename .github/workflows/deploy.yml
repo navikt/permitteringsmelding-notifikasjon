@@ -42,14 +42,12 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           team: fager
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          IMAGE: ${{ steps.login.outputs.registry }}/permitteringsmelding-notifikasjon:${{ github.sha }}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
           CLUSTER: dev-gcp
           RESOURCE: nais/dev-gcp.yaml
           PRINT_PAYLOAD: true
-          VAR: commit=${{ github.sha }}
+          VAR: commit=${{ github.sha }},image=${{ steps.login.outputs.registry }}/permitteringsmelding-notifikasjon:${{ github.sha }}
           REF: ${{ github.sha }}
 
   deploy-to-prod:
@@ -68,12 +66,10 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           team: fager
-      - uses: nais/deploy/actions/deploy@v1
+      - uses: nais/deploy/actions/deploy@v2
         env:
-          IMAGE: ${{ steps.login.outputs.registry }}/permitteringsmelding-notifikasjon:${{ github.sha }}
-          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY_TEAM }}
           CLUSTER: prod-gcp
           RESOURCE: nais/prod-gcp.yaml
           PRINT_PAYLOAD: true
-          VAR: commit=${{ github.sha }}
+          VAR: commit=${{ github.sha }},image=${{ steps.login.outputs.registry }}/permitteringsmelding-notifikasjon:${{ github.sha }}
           REF: ${{ github.sha }}
