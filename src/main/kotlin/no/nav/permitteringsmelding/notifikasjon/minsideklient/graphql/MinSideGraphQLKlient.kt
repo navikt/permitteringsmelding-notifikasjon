@@ -11,8 +11,12 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
+import no.nav.permitteringsmelding.notifikasjon.basedOnEnv
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.AltinnMottakerInput
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.AltinnRessursMottakerInput
+import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.MottakerInput
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
 import no.nav.permitteringsmelding.notifikasjon.log
 import java.net.URL
@@ -35,6 +39,11 @@ class MinSideGraphQLKlient(
 
     private val client = GraphQLKtorClient(url = URL(endpoint), httpClient = httpClient)
 
+    private val mottaker = basedOnEnv(
+        prod = { MottakerInput(altinn = AltinnMottakerInput(serviceCode = "5810", serviceEdition = "1"), altinnRessurs = null, naermesteLeder = null) },
+        other = { MottakerInput(altinn = null, altinnRessurs = AltinnRessursMottakerInput(ressursId = "nav_permittering-og-nedbemmaning_innsyn-i-alle-innsendte-meldinger"), naermesteLeder = null) }
+    )
+
     suspend fun opprettNySak(
         grupperingsid: String,
         merkelapp: String,
@@ -52,7 +61,8 @@ class MinSideGraphQLKlient(
                     virksomhetsnummer,
                     tittel,
                     lenke,
-                    tidspunkt
+                    tidspunkt,
+                    mottaker
                 )
             )
         ) {
