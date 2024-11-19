@@ -5,6 +5,7 @@ mutation OpprettNySak(
     $tittel: String!
     $lenke: String!
     $tidspunkt: ISO8601DateTime
+    $mottaker: MottakerInput!
 ) {
     nySak(
         hardDelete: {
@@ -14,12 +15,7 @@ mutation OpprettNySak(
         merkelapp: $merkelapp,
         virksomhetsnummer: $virksomhetsnummer,
         mottakere: [
-            {
-                altinn: {
-                    serviceCode: "5810"
-                    serviceEdition: "1"
-                }
-            }
+            $mottaker
         ],
         tittel: $tittel,
         lenke: $lenke,
@@ -41,6 +37,9 @@ mutation OpprettNySak(
             feilmelding
         }
         ... on DuplikatGrupperingsid {
+            feilmelding
+        }
+        ... on DuplikatGrupperingsidEtterDelete {
             feilmelding
         }
         ... on UkjentRolle {
