@@ -11,15 +11,13 @@ import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import no.nav.permitteringsmelding.notifikasjon.Env
 import no.nav.permitteringsmelding.notifikasjon.autentisering.Oauth2Client
-import no.nav.permitteringsmelding.notifikasjon.basedOnEnv
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.ISO8601DateTime
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.OpprettNySak
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.AltinnMottakerInput
-import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.AltinnRessursMottakerInput
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.inputs.MottakerInput
 import no.nav.permitteringsmelding.notifikasjon.graphql.`generated"`.opprettnysak.*
 import no.nav.permitteringsmelding.notifikasjon.log
-import java.net.URL
+import java.net.URI
 
 
 private val defaultHttpClient = HttpClient(CIO) {
@@ -37,12 +35,10 @@ class MinSideGraphQLKlient(
     private val oauth2Client: Oauth2Client
 ) {
 
-    private val client = GraphQLKtorClient(url = URL(endpoint), httpClient = httpClient)
-
-    private val mottaker = basedOnEnv(
-        prod = { MottakerInput(altinn = AltinnMottakerInput(serviceCode = "5810", serviceEdition = "1"), altinnRessurs = null, naermesteLeder = null) },
-        other = { MottakerInput(altinn = null, altinnRessurs = AltinnRessursMottakerInput(ressursId = "nav_permittering-og-nedbemmaning_innsyn-i-alle-innsendte-meldinger"), naermesteLeder = null) }
-    )
+    private val client = GraphQLKtorClient(url = URI(endpoint).toURL(), httpClient = httpClient)
+    private val mottaker = MottakerInput(altinn = AltinnMottakerInput(serviceCode = "5810", serviceEdition = "1"), altinnRessurs = null, naermesteLeder = null)
+    // TODO: endre til Altinn3 etter migrering
+    // private val mottaker = MottakerInput(altinn = null, altinnRessurs = AltinnRessursMottakerInput(ressursId = "nav_permittering-og-nedbemmaning_innsyn-i-alle-innsendte-meldinger"), naermesteLeder = null)
 
     suspend fun opprettNySak(
         grupperingsid: String,
